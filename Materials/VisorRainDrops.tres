@@ -11,7 +11,3 @@ shader_parameter/time_scale = 1.0
 shader_parameter/alpha_gain = 1.0
 shader_parameter/alpha_softness = 0.15
 shader_parameter/min_alpha = 0.0
-shader_parameter/blur_radius_px = 2.0
-shader_parameter/blur_strength = 1.0
-shader_parameter/droplet_blur_radius_px = 1.0
-shader_parameter/droplet_blur_strength = 1.0
