@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://bqjc6klhvm5wm"]
+
+[ext_resource type="Shader" uid="uid://bie2db72gpwti" path="res://Shaders/RainDropGlass.gdshader" id="1_yrlhu"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_yrlhu")
+shader_parameter/refraction_strength = 0.03
+shader_parameter/uv_scale = 10.0
+shader_parameter/time_scale = 1.0
+shader_parameter/alpha_gain = 1.0
+shader_parameter/alpha_softness = 0.15
+shader_parameter/min_alpha = 0.0
