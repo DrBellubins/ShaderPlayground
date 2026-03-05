@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://db7b31k2j20k1"]
+
+[ext_resource type="Texture2D" uid="uid://dipskaf8buci1" path="res://Models/Helmet/gltf/Material_001_BaseColor.png" id="1_v753r"]
+[ext_resource type="Texture2D" uid="uid://cfiw0x0meirk1" path="res://Models/Helmet/gltf/Material_001_Normal.png" id="2_pkq72"]
+
+[resource]
+albedo_texture = ExtResource("1_v753r")
+roughness = 0.2
+normal_enabled = true
+normal_scale = 4.0
+normal_texture = ExtResource("2_pkq72")

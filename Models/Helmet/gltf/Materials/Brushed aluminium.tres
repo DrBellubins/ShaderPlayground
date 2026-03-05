@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bfb65er25y08c"]
+
+[ext_resource type="Texture2D" uid="uid://d0mmggvrprae2" path="res://Models/Helmet/gltf/checker_Normal.png" id="1_bcu20"]
+
+[resource]
+albedo_color = Color(0.4661808, 0.46618086, 0.46618068, 1)
+metallic = 1.0
+metallic_specular = 0.0
+roughness = 0.4
+normal_enabled = true
+normal_texture = ExtResource("1_bcu20")

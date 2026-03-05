@@ -1,0 +1,85 @@
+[remap]
+
+importer="scene"
+importer_version=1
+type="PackedScene"
+uid="uid://bj31phvuapfi8"
+path="res://.godot/imported/4khelmet.gltf-ee2b7cdb6c904d2dad879cc763fd849b.scn"
+
+[deps]
+
+source_file="res://Models/Helmet/gltf/4khelmet.gltf"
+dest_files=["res://.godot/imported/4khelmet.gltf-ee2b7cdb6c904d2dad879cc763fd849b.scn"]
+
+[params]
+
+nodes/root_type=""
+nodes/root_name=""
+nodes/root_script=null
+nodes/apply_root_scale=true
+nodes/root_scale=1.0
+nodes/import_as_skeleton_bones=false
+nodes/use_name_suffixes=true
+nodes/use_node_type_suffixes=true
+meshes/ensure_tangents=true
+meshes/generate_lods=true
+meshes/create_shadow_meshes=true
+meshes/light_baking=1
+meshes/lightmap_texel_size=0.2
+meshes/force_disable_compression=false
+skins/use_named_skins=true
+animation/import=true
+animation/fps=30
+animation/trimming=false
+animation/remove_immutable_tracks=true
+animation/import_rest_as_RESET=false
+import_script/path=""
+materials/extract=0
+materials/extract_format=0
+materials/extract_path=""
+_subresources={
+"materials": {
+"Black Plastic": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://Models/Helmet/gltf/Materials/Black Plastic.tres",
+"use_external/path": "uid://i1524ak1ppga"
+},
+"Brushed aluminium": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://Models/Helmet/gltf/Materials/Brushed aluminium.tres",
+"use_external/path": "uid://bfb65er25y08c"
+},
+"Glass Transpearant Green Tint": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://Models/Helmet/gltf/Materials/Glass Transpearant Green Tint.tres",
+"use_external/path": "uid://dnjgvk83xrsr7"
+},
+"Material.001": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://Models/Helmet/gltf/Materials/Material.001.tres",
+"use_external/path": "uid://db7b31k2j20k1"
+},
+"Procedural Felt": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://Models/Helmet/gltf/Materials/Procedural Felt.tres",
+"use_external/path": "uid://bhhnyljf7xm7"
+},
+"Procedural Felt.001": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://Models/Helmet/gltf/Materials/Procedural Felt.001.tres",
+"use_external/path": "uid://w3jwfx56u6ng"
+},
+"Procedural Felt.002": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://Models/Helmet/gltf/Materials/Procedural Felt.002.tres",
+"use_external/path": "uid://bvau56eh1hjyc"
+},
+"visorlogo": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://Models/Helmet/gltf/Materials/visorlogo.tres",
+"use_external/path": "uid://g8hju7v458g0"
+}
+}
+}
+gltf/naming_version=2
+gltf/embedded_image_handling=1

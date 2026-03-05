@@ -1,0 +1,53 @@
+newmtl plastmassa
+Kd 0 0 0
+d 1
+illum 2
+Ks 0 0 0
+Ns 705.602134
+
+newmtl Steklo
+Kd 0 0 0
+d 0.797066
+illum 2
+Ks 0.25 0.25 0.25
+Ns 1000
+
+newmtl Steklo Mat
+Kd 0.477325 0.477325 0.477325
+d 0.498285
+illum 2
+Ks 0.25 0.25 0.25
+Ns 498.285061
+
+newmtl Tkan
+Kd 1 1 1
+d 1
+illum 2
+map_Kd images/Layers.png
+map_Bump images/n.png
+Ks 0.25 0.25 0.25
+Ns 0
+
+newmtl Kraska
+Kd 0 0.090548 0.721227
+d 1
+illum 2
+Ks 0.0745 0.0745 0.0745
+Ns 1000
+
+newmtl Setka
+Kd 0.062691 0.062691 0.062691
+d 1
+illum 2
+map_Kd images/metal6.png
+Ks 0.25 0.25 0.25
+Ns 839.748476
+map_d images/metal6.png
+
+newmtl Bolt
+Kd 0.8 0.8 0.8
+d 1
+illum 2
+Ks 0.25 0.25 0.25
+Ns 839.748476
+

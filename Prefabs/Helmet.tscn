@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://c08v43b8xkdpa"]
+
+[ext_resource type="PackedScene" uid="uid://bj31phvuapfi8" path="res://Models/Helmet/gltf/4khelmet.gltf" id="1_cluxr"]
+
+[node name="Helmet" type="Node3D" unique_id=917013353]
+
+[node name="4khelmet" parent="." unique_id=14342926 instance=ExtResource("1_cluxr")]

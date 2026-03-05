@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://geh7augvu5ky"]
+
+[ext_resource type="Script" uid="uid://db4xqxw6mxga7" path="res://Scripts/FPSController.cs" id="1_8iq7x"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_22lva"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_um8lo"]
+
+[node name="Player" type="RigidBody3D"]
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+axis_lock_angular_z = true
+continuous_cd = true
+script = ExtResource("1_8iq7x")
+Speed = 4000.0
+JoystickSensitivity = 10.0
+CrouchHeight = 1.0
+AirControl = 1.0
+Friction = 0.65
+
+[node name="Collider" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_22lva")
+
+[node name="Camera" type="Camera3D" parent="."]
+far = 500.0
+
+[node name="GroundRay" type="RayCast3D" parent="."]
+target_position = Vector3(0, -1.1, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("CapsuleMesh_um8lo")

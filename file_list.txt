@@ -1,4 +1,5 @@
-./Scenes/ray_marching.tscn
+./Scenes/rain_scene.tscn
+./Scenes/ShadowRaytrace.tscn
 ./.gitattributes
 ./.idea/.idea.ShaderPlayground/.idea/encodings.xml
 ./.idea/.idea.ShaderPlayground/.idea/projectSettingsUpdater.xml
@@ -7,16 +8,94 @@
 ./.idea/.idea.ShaderPlayground/.idea/libraries/GdSdk.xml
 ./.idea/.idea.ShaderPlayground/.idea/workspace.xml
 ./.idea/.idea.ShaderPlayground/.idea/indexLayout.xml
+./Prefabs/fixed_helmet.tscn
+./Prefabs/Helmet.tscn
+./Models/Helmet/Motorcycle Helmet.fbx
+./Models/Helmet/gltf/checker_BaseColor.png
+./Models/Helmet/gltf/checker_Normal.png.import
+./Models/Helmet/gltf/checker_Metallic-checker_Roughness.png
+./Models/Helmet/gltf/4khelmet.bin
+./Models/Helmet/gltf/Material_001_BaseColor.png.import
+./Models/Helmet/gltf/4khelmet.gltf.import
+./Models/Helmet/gltf/checker_BaseColor.png.import
+./Models/Helmet/gltf/checker_Metallic-checker_Roughness.png.import
+./Models/Helmet/gltf/Material_001_Metallic-Material_001_Roughness.png.import
+./Models/Helmet/gltf/Material_001_BaseColor.png
+./Models/Helmet/gltf/Material_001_Metallic-Material_001_Roughness.png
+./Models/Helmet/gltf/Material_001_Normal.png
+./Models/Helmet/gltf/Material_001_Normal.png.import
+./Models/Helmet/gltf/checker_Normal.png
+./Models/Helmet/gltf/Materials/Glass Transpearant Green Tint.tres
+./Models/Helmet/gltf/Materials/Material.001.tres
+./Models/Helmet/gltf/Materials/Procedural Felt.tres
+./Models/Helmet/gltf/Materials/Procedural Felt.002.tres
+./Models/Helmet/gltf/Materials/visorlogo.tres
+./Models/Helmet/gltf/Materials/Brushed aluminium.tres
+./Models/Helmet/gltf/Materials/Procedural Felt.001.tres
+./Models/Helmet/gltf/Materials/Black Plastic.tres
+./Models/Helmet/gltf/4khelmet.gltf
+./Models/Helmet/Motorcycle Helmet.fbx.import
+./Models/Helmet/textures/metal6.png.import
+./Models/Helmet/textures/metal6.png
+./Models/Helmet/textures/n.png
+./Models/Helmet/textures/Layers.png
+./Models/Helmet/textures/n.png.import
+./Models/Helmet/textures/Layers.png.import
 ./.editorconfig
 ./icon.svg.import
 ./.gitignore
 ./Shaders/Raytracing/raytracer.glsl
 ./Shaders/Raytracing/raytracer.glsl.import
 ./icon.svg
+./.godot/imported/n.png-26cf6e39dd0283b415119390af6ed46b.ctex
+./.godot/imported/Material_001_Metallic-Material_001_Roughness.png-30eb8b7d6ca5ebd6e5bd856b1868c441.ctex
+./.godot/imported/n.png-26cf6e39dd0283b415119390af6ed46b.s3tc.ctex
+./.godot/imported/Material_001_Metallic-Material_001_Roughness.png-30eb8b7d6ca5ebd6e5bd856b1868c441.s3tc.ctex
+./.godot/imported/checker_Metallic-checker_Roughness.png-408074a4d7087eb47cbeee172699313c.ctex
+./.godot/imported/Layers.png-bec6a8d526e5a325d107bfce67ecd3f6.ctex
+./.godot/imported/metal6.png-5b7aa892418c20a0b49da403b9fe3bd7.ctex
+./.godot/imported/n.png-807ab9cf8bc958cd0f2945599b68aad2.s3tc.ctex-vhQfB1
+./.godot/imported/Material_001_Normal.png-6d33e601310ccb62a49201bff84decd6.md5
+./.godot/imported/Layers.png-bec6a8d526e5a325d107bfce67ecd3f6.s3tc.ctex
+./.godot/imported/Material_001_BaseColor.png-ca0b52265ea5685dcbf20e7c7832cd24.ctex
+./.godot/imported/Material_001_BaseColor.png-ca0b52265ea5685dcbf20e7c7832cd24.md5
+./.godot/imported/Layers.png-1841689d18e99aa2455a3352a09c3072.md5
+./.godot/imported/4khelmet.gltf-ee2b7cdb6c904d2dad879cc763fd849b.scn
+./.godot/imported/metal6.png-c1cfa2489a6ccd8507e2ec8e7114a422.s3tc.ctex
 ./.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.md5
+./.godot/imported/Material_001_Normal.png-6d33e601310ccb62a49201bff84decd6.ctex
+./.godot/imported/checker_BaseColor.png-66641e7332636fba711fa135bda4a9b3.ctex
+./.godot/imported/checker_Metallic-checker_Roughness.png-408074a4d7087eb47cbeee172699313c.s3tc.ctex
+./.godot/imported/checker_BaseColor.png-66641e7332636fba711fa135bda4a9b3.s3tc.ctex
+./.godot/imported/Motorcycle Helmet.fbx-71b99966d4e3e556ed429485c63961c3.scn
+./.godot/imported/Motorcycle Helmet.fbx-71b99966d4e3e556ed429485c63961c3.md5
+./.godot/imported/Layers.png-1841689d18e99aa2455a3352a09c3072.s3tc.ctex
+./.godot/imported/Layers.png-1841689d18e99aa2455a3352a09c3072.ctex
+./.godot/imported/checker_Normal.png-df454355309b29c7e61dff1226b0ff44.md5
+./.godot/imported/metal6.png-5b7aa892418c20a0b49da403b9fe3bd7.md5
+./.godot/imported/Motorcycle Helmet.obj-620b5ace321717f78137a31567e3deac.md5
+./.godot/imported/4khelmet.gltf-ee2b7cdb6c904d2dad879cc763fd849b.md5
 ./.godot/imported/raytracer.glsl-6e9ba00aadd9578e4f2d2e6b79c11206.md5
+./.godot/imported/checker_Normal.png-df454355309b29c7e61dff1226b0ff44.ctex
+./.godot/imported/n.png-807ab9cf8bc958cd0f2945599b68aad2.s3tc.ctex
+./.godot/imported/n.png-807ab9cf8bc958cd0f2945599b68aad2.md5
 ./.godot/imported/raytracer.glsl-6e9ba00aadd9578e4f2d2e6b79c11206.res
 ./.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex
+./.godot/imported/metal6.png-5b7aa892418c20a0b49da403b9fe3bd7.s3tc.ctex-l7mtEY
+./.godot/imported/metal6.png-c1cfa2489a6ccd8507e2ec8e7114a422.md5
+./.godot/imported/checker_BaseColor.png-66641e7332636fba711fa135bda4a9b3.md5
+./.godot/imported/Motorcycle Helmet.obj-620b5ace321717f78137a31567e3deac.mesh
+./.godot/imported/checker_Normal.png-df454355309b29c7e61dff1226b0ff44.s3tc.ctex
+./.godot/imported/metal6.png-5b7aa892418c20a0b49da403b9fe3bd7.s3tc.ctex
+./.godot/imported/Material_001_BaseColor.png-ca0b52265ea5685dcbf20e7c7832cd24.s3tc.ctex
+./.godot/imported/checker_Metallic-checker_Roughness.png-408074a4d7087eb47cbeee172699313c.md5
+./.godot/imported/Layers.png-bec6a8d526e5a325d107bfce67ecd3f6.md5
+./.godot/imported/metal6.png-c1cfa2489a6ccd8507e2ec8e7114a422.ctex
+./.godot/imported/Layers.png-bec6a8d526e5a325d107bfce67ecd3f6.s3tc.ctex-gdq9pF
+./.godot/imported/n.png-807ab9cf8bc958cd0f2945599b68aad2.ctex
+./.godot/imported/Material_001_Metallic-Material_001_Roughness.png-30eb8b7d6ca5ebd6e5bd856b1868c441.md5
+./.godot/imported/n.png-26cf6e39dd0283b415119390af6ed46b.md5
+./.godot/imported/Material_001_Normal.png-6d33e601310ccb62a49201bff84decd6.s3tc.ctex
 ./.godot/.gdignore
 ./.godot/shader_cache/CopyShaderRD/e9cc8703737058ab94419d921c4ffa210eedec9e9902e44b4b3b0898bea779ad/087916079fba7c625e62b0c2cca570e0fb87c99a.vulkan.cache
 ./.godot/shader_cache/CubeToOctmapShaderRD/5fc57d05f5d131338b97f340dc2c3656545f2e042759ccfe92bdbbf87ab5eac3/087916079fba7c625e62b0c2cca570e0fb87c99a.vulkan.cache
@@ -69,19 +148,28 @@
 ./.godot/shader_cache/OctmapDownsamplerShaderRD/f7cc7d472883dcc7f351a5ffde028bb15c7b5d7589eacdf02c3633cf2a7829c5/087916079fba7c625e62b0c2cca570e0fb87c99a.vulkan.cache
 ./.godot/shader_cache/SdfgiDebugShaderRD/7e91b12089148e9624d3b772c591a8eee798246bf853e9ec512804a7f33b3889/087916079fba7c625e62b0c2cca570e0fb87c99a.vulkan.cache
 ./.godot/shader_cache/ClusterDebugShaderRD/cf9e7f6b32d31ae8694758a95663a7c9fab66d2cdbc6bbfbfbdc73a452409cb7/087916079fba7c625e62b0c2cca570e0fb87c99a.vulkan.cache
+./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/337ebb2e6b477d2b4dadafb826ad4fdd791f2be6.vulkan.cache
 ./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/111f8cfd3c260d918df85827eb251dc36a43cb13.vulkan.cache
 ./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/7a57964a6a80c226a1011fb78edbda41d2219632.vulkan.cache
 ./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/7412c254abd0f944fb53942228920fe187f1d723.vulkan.cache
 ./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/7a6b05ba6ca90f8a542e0d1fcc3360f7d52c6e09.vulkan.cache
+./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/d11c4bb7a8b6d42e743075e96df095753bd912fe.vulkan.cache
 ./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/a38af1e47720abf30ca44f3d3c099c07b046df81.vulkan.cache
+./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/cd4378ea5ab3ec679acf0eb94d37e849077e4c2d.vulkan.cache
 ./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/715f7f95b6842bf66262e2a58fb864970126ecf4.vulkan.cache
+./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/1fe40a1067e6f28eb82655826a0455d0c7d6643d.vulkan.cache
 ./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/7d4c2429f20db9b651852713d31971380f209eec.vulkan.cache
 ./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/118dde12a46e72727c7cf74f74975d98887d51fd.vulkan.cache
+./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/0d7b0b9f7ff98886aa441316467fa4e138f6d08f.vulkan.cache
+./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/d5b65da8b54fd78c9941c2c7f18eed94888383af.vulkan.cache
+./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/f407568d0ae46b5742ff6f47048d32bfa75efa00.vulkan.cache
+./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/61d761d28b7c6f56b1c947c1beea858d26a3e388.vulkan.cache
 ./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/6371e69b888c685a23ccea3d75bce814b90f23d7.vulkan.cache
 ./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/f88424e725a3bb50f358e9b042552af7b1c2f921.vulkan.cache
 ./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/35a078cb7dc07df55e460ed1a913486a68ab6bb0.vulkan.cache
 ./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/ab0b960474f1491b42ef9f2ca13dbd4ccaf64911.vulkan.cache
 ./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/89044bace37a3ce54cf2cc5190e11bed6d14f97a.vulkan.cache
+./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/321e42e1280eb440cb08d0ceb1689cb32a542119.vulkan.cache
 ./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/f89c365b12d7e2d46fb2e1f6ace46a76b6cd5e89.vulkan.cache
 ./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/3d6fc53bad5e871b1b878eb1a4ed0a0fcec449cb.vulkan.cache
 ./.godot/shader_cache/SmaaEdgeDetectionShaderRD/d87a8d48df4d7f1e99d50fdda5183397a5adb65dc240df7fc07a7ce2955fe3d7/087916079fba7c625e62b0c2cca570e0fb87c99a.vulkan.cache
@@ -96,27 +184,54 @@
 ./.godot/shader_cache/CanvasShaderRD/275d4d34e3615bf0802f2ef82109d1cde17c7aa8031e89154c70fc7b3d40d52f/45fb1ddc6499e56682916a355ce2839e61f42dfe.vulkan.cache
 ./.godot/shader_cache/CanvasShaderRD/275d4d34e3615bf0802f2ef82109d1cde17c7aa8031e89154c70fc7b3d40d52f/087916079fba7c625e62b0c2cca570e0fb87c99a.vulkan.cache
 ./.godot/shader_cache/CanvasShaderRD/275d4d34e3615bf0802f2ef82109d1cde17c7aa8031e89154c70fc7b3d40d52f/4d35b4f1b981d75cb121b24f26aba4271d0d7a2f.vulkan.cache
+./.godot/shader_cache/CanvasShaderRD/275d4d34e3615bf0802f2ef82109d1cde17c7aa8031e89154c70fc7b3d40d52f/27090bcd8ab60c596b0565d5172c6bed97e9bf20.vulkan.cache
 ./.godot/shader_cache/CanvasShaderRD/275d4d34e3615bf0802f2ef82109d1cde17c7aa8031e89154c70fc7b3d40d52f/f3e258e8f7ec2e7e740b62f3bc48ecf5c99fb0db.vulkan.cache
 ./.godot/shader_cache/CanvasShaderRD/275d4d34e3615bf0802f2ef82109d1cde17c7aa8031e89154c70fc7b3d40d52f/c0a681ae42aa3e0b5abba232ccae0b036be455e4.vulkan.cache
 ./.godot/shader_cache/CanvasShaderRD/275d4d34e3615bf0802f2ef82109d1cde17c7aa8031e89154c70fc7b3d40d52f/8a7277c8d3ac029b087c3fa9c55de85560be5119.vulkan.cache
 ./.godot/shader_cache/OctmapRoughnessShaderRD/953daee2b7c11cf846dd5b590a624c33a6d367972b684494ecbbb5fdeb8e9b1f/087916079fba7c625e62b0c2cca570e0fb87c99a.vulkan.cache
 ./.godot/global_script_class_cache.cfg
 ./.godot/scene_groups_cache.cfg
+./.godot/editor/Motorcycle Helmet.obj-620b5ace321717f78137a31567e3deac.mesh-folding-d291e3a8d26bdfe9c7d57b0ef08c9a18.cfg
 ./.godot/editor/project_metadata.cfg
 ./.godot/editor/raytracer.glsl-6e9ba00aadd9578e4f2d2e6b79c11206.res-folding-ec5a6d52fa0f62cdaf0f1a5a69178343.cfg
+./.godot/editor/fixed_helmet.tscn-folding-3d715b07c7a8ac584547c4273f4ab530.cfg
+./.godot/editor/Helmet.tscn-editstate-c41495c07f6ef6e70860cddbcc4b8fb0.cfg
+./.godot/editor/Motorcycle Helmet.fbx-folding-71b99966d4e3e556ed429485c63961c3.cfg
+./.godot/editor/rain_scene.tscn-folding-0936e0f65976e6a60a1fc8e2c9c7b49c.cfg
+./.godot/editor/Procedural Felt.tres-folding-2cac965ae218bcb08245cd6057ca492e.cfg
 ./.godot/editor/editor_layout.cfg
 ./.godot/editor/favorite_properties
 ./.godot/editor/CameraFly.cs-folding-176c5972e1b98ee065587bd99f6da2c7.cfg
+./.godot/editor/Glass Transpearant Green Tint.tres-folding-429aa29c6b4591487c69e9c04395917c.cfg
+./.godot/editor/Procedural Felt.001.tres-folding-166ccd525a487e304e178ab7f2422c6e.cfg
+./.godot/editor/create_recent.Resource
+./.godot/editor/Helmet.tscn-folding-c41495c07f6ef6e70860cddbcc4b8fb0.cfg
 ./.godot/editor/editor_script_doc_cache.res-folding-a7de57390d6e786984ca20c70a831128.cfg
 ./.godot/editor/ray_marching.tscn-editstate-0ca52db6c9d97ab4d0981b31ab9fbd83.cfg
+./.godot/editor/recent_dirs
 ./.godot/editor/filesystem_update4
 ./.godot/editor/favorites
+./.godot/editor/Brushed aluminium.tres-folding-116f976bde3ef697792507fa43a78291.cfg
+./.godot/editor/visorlogo.tres-folding-2f4f39e7db886b6e853fe256a885d4ba.cfg
+./.godot/editor/Motorcycle Helmet.fbx-71b99966d4e3e556ed429485c63961c3.scn-folding-4756fbe657e23142a767e11881086f84.cfg
 ./.godot/editor/Hotkeys.cs-folding-317885f5fdede8cc5bf97aa6ff1ec0b9.cfg
 ./.godot/editor/filesystem_cache10
+./.godot/editor/Ginput.cs-folding-a2393fcc5034a35db2f9746830116fa5.cfg
+./.godot/editor/Black Plastic.tres-folding-b1725944b92d937d87f6c8a24a51d8ce.cfg
 ./.godot/editor/create_recent.Node
+./.godot/editor/Glass Transpearant Green Tint Black Plastic.tres-folding-433b5267e874a3554696dcbfc7188596.cfg
+./.godot/editor/ShadowRaytrace.tscn-folding-31d85a04aab54c885a91eac470913040.cfg
 ./.godot/editor/script_editor_cache.cfg
+./.godot/editor/favorites.Resource
+./.godot/editor/Procedural Felt.002.tres-folding-70158116041eb5cc62a44c5ee440b56c.cfg
+./.godot/editor/4khelmet.gltf-folding-ee2b7cdb6c904d2dad879cc763fd849b.cfg
+./.godot/editor/Material.001.tres-folding-3d8520d61c1156245961b657507d8f8a.cfg
+./.godot/editor/rain_scene.tscn-editstate-0936e0f65976e6a60a1fc8e2c9c7b49c.cfg
+./.godot/editor/fixed_helmet.tscn-editstate-3d715b07c7a8ac584547c4273f4ab530.cfg
 ./.godot/editor/favorites.Node
+./.godot/editor/FPSController.cs-folding-aeefbedd86888b23f26023ba49b01fb1.cfg
 ./.godot/editor/ray_marching.tscn-folding-0ca52db6c9d97ab4d0981b31ab9fbd83.cfg
+./.godot/editor/4khelmet.gltf-ee2b7cdb6c904d2dad879cc763fd849b.scn-folding-da4c9fb70a37ad964d88a5a885f6e85f.cfg
 ./.godot/mono/metadata/ide_messaging_meta.txt
 ./.godot/uid_cache.bin
 ./project.godot
@@ -124,9 +239,15 @@
 ./file_list.txt
 ./ShaderPlayground.sln
 ./ShaderPlayground.csproj
+./Scripts/FPSController.cs.uid
 ./Scripts/RaytracedCompute.cs.uid
+./Scripts/Utils/Ginput.cs.uid
+./Scripts/Utils/DebugTextDraw.cs
+./Scripts/Utils/Ginput.cs
+./Scripts/Utils/DebugTextDraw.cs.uid
 ./Scripts/Hotkeys.cs.uid
 ./Scripts/CameraFly.cs.uid
 ./Scripts/CameraFly.cs
 ./Scripts/Hotkeys.cs
+./Scripts/FPSController.cs
 ./Scripts/RaytracedCompute.cs

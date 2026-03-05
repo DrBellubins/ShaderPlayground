@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://w3jwfx56u6ng"]
+
+[ext_resource type="Texture2D" uid="uid://bjgkd1cuhn47q" path="res://Models/Helmet/obj/images/Layers.png" id="1_o5mp8"]
+[ext_resource type="Texture2D" uid="uid://d1mj2u05tmoct" path="res://Models/Helmet/obj/images/n.png" id="2_5ouwa"]
+
+[resource]
+albedo_texture = ExtResource("1_o5mp8")
+roughness = 0.55
+normal_enabled = true
+normal_texture = ExtResource("2_5ouwa")
+uv1_offset = Vector3(0.085, -0.05, 0)
