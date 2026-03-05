@@ -1,3 +1,10 @@
 [gd_resource type="StandardMaterial3D" format=3 uid="uid://g8hju7v458g0"]
 
+[ext_resource type="Texture2D" uid="uid://mg3h0lgibfav" path="res://Models/Helmet/gltf/checker_BaseColor.png" id="1_cahi7"]
+[ext_resource type="Texture2D" uid="uid://dm1g4lxa5g45k" path="res://Models/Helmet/gltf/checker_Metallic-checker_Roughness.png" id="2_5gvfx"]
+
 [resource]
+albedo_texture = ExtResource("1_cahi7")
+roughness = 0.65
+roughness_texture = ExtResource("2_5gvfx")
+roughness_texture_channel = 4

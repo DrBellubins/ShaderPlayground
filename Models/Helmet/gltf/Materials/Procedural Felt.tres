@@ -4,9 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://d1mj2u05tmoct" path="res://Models/Helmet/obj/images/n.png" id="2_adwp0"]
 
 [resource]
-albedo_color = Color(0.45840502, 0.45840508, 0.45840502, 1)
 albedo_texture = ExtResource("1_xk1w7")
-roughness = 0.4
+roughness = 0.7
 normal_enabled = true
 normal_texture = ExtResource("2_adwp0")
 uv1_scale = Vector3(0.905, 0.905, 0.905)

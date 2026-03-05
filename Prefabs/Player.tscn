@@ -1,12 +1,17 @@
-[gd_scene format=3 uid="uid://geh7augvu5ky"]
+[gd_scene format=3 uid="uid://6uy72by2n7"]
 
-[ext_resource type="Script" uid="uid://db4xqxw6mxga7" path="res://Scripts/FPSController.cs" id="1_8iq7x"]
+[ext_resource type="Script" uid="uid://xwhlqsiddvx6" path="res://Scripts/FPSController.cs" id="1_8iq7x"]
+[ext_resource type="Environment" uid="uid://b4qrcwxw4e8u0" path="res://main_env.tres" id="2_b43ah"]
+[ext_resource type="PackedScene" uid="uid://ciqhugtofjpjn" path="res://Prefabs/fixed_helmet.tscn" id="2_x3d5u"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_22lva"]
 
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_b43ah"]
+dof_blur_near_enabled = true
+
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_um8lo"]
 
-[node name="Player" type="RigidBody3D"]
+[node name="Player" type="RigidBody3D" unique_id=484871282]
 axis_lock_angular_x = true
 axis_lock_angular_y = true
 axis_lock_angular_z = true
@@ -18,15 +23,20 @@ CrouchHeight = 1.0
 AirControl = 1.0
 Friction = 0.65
 
-[node name="Collider" type="CollisionShape3D" parent="."]
+[node name="Collider" type="CollisionShape3D" parent="." unique_id=1449961430]
 shape = SubResource("CapsuleShape3D_22lva")
 
-[node name="Camera" type="Camera3D" parent="."]
-far = 500.0
+[node name="Camera" type="Camera3D" parent="." unique_id=1199423490]
+environment = ExtResource("2_b43ah")
+attributes = SubResource("CameraAttributesPractical_b43ah")
+current = true
 
-[node name="GroundRay" type="RayCast3D" parent="."]
+[node name="4khelmet" parent="Camera" unique_id=1330405748 instance=ExtResource("2_x3d5u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.04, 0.145)
+
+[node name="GroundRay" type="RayCast3D" parent="." unique_id=621786090]
 target_position = Vector3(0, -1.1, 0)
 
-[node name="Mesh" type="MeshInstance3D" parent="."]
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=1141081007]
 visible = false
 mesh = SubResource("CapsuleMesh_um8lo")

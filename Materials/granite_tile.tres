@@ -1,0 +1,24 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://ma6u58wvd42i"]
+
+[ext_resource type="Texture2D" uid="uid://bh7a2u5v32ft7" path="res://Materials/Textures/granite_tile/granite_tile_04_diff_2k.png" id="1_7phpx"]
+[ext_resource type="Texture2D" uid="uid://b4gsqf2hlcl0b" path="res://Materials/Textures/granite_tile/granite_tile_04_disp_2k.png" id="2_023jl"]
+[ext_resource type="Texture2D" uid="uid://bcjampbk12aae" path="res://Materials/Textures/granite_tile/granite_tile_04_nor_gl_2k.png" id="3_8w2h0"]
+[ext_resource type="Texture2D" uid="uid://ckp1tr6dy8iy" path="res://Materials/Textures/granite_tile/granite_tile_04_rough_2k.png" id="4_ix5mj"]
+
+[resource]
+albedo_texture = ExtResource("1_7phpx")
+roughness = 0.6
+roughness_texture = ExtResource("4_ix5mj")
+roughness_texture_channel = 4
+normal_enabled = true
+normal_texture = ExtResource("3_8w2h0")
+heightmap_enabled = true
+heightmap_scale = 2.0
+heightmap_deep_parallax = true
+heightmap_min_layers = 32
+heightmap_max_layers = 32
+heightmap_texture = ExtResource("2_023jl")
+uv1_scale = Vector3(0.2, 0.2, 0.2)
+uv1_offset = Vector3(-0.004, 0.9, 4.7)
+uv1_triplanar = true
+uv1_world_triplanar = true

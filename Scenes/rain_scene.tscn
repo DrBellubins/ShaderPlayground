@@ -1,7 +1,26 @@
 [gd_scene format=3 uid="uid://baw0dwt5s74gn"]
 
-[ext_resource type="PackedScene" path="res://Prefabs/Player.tscn" id="1_qg12j"]
+[ext_resource type="Script" uid="uid://dy0qxn4a5xn1b" path="res://Scripts/Hotkeys.cs" id="1_3rdh1"]
+[ext_resource type="PackedScene" uid="uid://ipr05trqec85" path="res://Prefabs/TiledCube.tscn" id="1_8np4j"]
+[ext_resource type="PackedScene" uid="uid://6uy72by2n7" path="res://Prefabs/Player.tscn" id="1_qg12j"]
+[ext_resource type="Environment" uid="uid://b4qrcwxw4e8u0" path="res://main_env.tres" id="4_c1f7b"]
 
 [node name="RainScene" type="Node3D" unique_id=1624505141]
+script = ExtResource("1_3rdh1")
 
 [node name="Player" parent="." unique_id=1658125350 instance=ExtResource("1_qg12j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.937815, 4.892203)
+
+[node name="TiledCube" parent="." unique_id=1041332627 instance=ExtResource("1_8np4j")]
+transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 20, 0, 0, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=890306041]
+environment = ExtResource("4_c1f7b")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1999413572]
+transform = Transform3D(-0.785306, -0.4663735, 0.40717328, -6.097403e-09, 0.65767765, 0.7532996, -0.6191078, 0.59157073, -0.5164783, 0, 0, 0)
+light_energy = 0.2
+shadow_enabled = true
+
+[node name="TiledCube2" parent="." unique_id=1141057990 instance=ExtResource("1_8np4j")]
+transform = Transform3D(5, 0, 0, 0, 3, 0, 0, 0, 0.5, -2.6909199, 2, 0.30154324)
