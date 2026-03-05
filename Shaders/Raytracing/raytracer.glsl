@@ -14,6 +14,7 @@ layout(set = 0, binding = 1) uniform Params
     vec4 CameraRight;       // xyz = right
     vec4 CameraUp;          // xyz = up
     vec4 Runtime;           // x = JitterSpeed, yzw = reserved
+    vec4 SunDirection;
 } Parameters;
 
 const float InfiniteDistance = 1e30;
@@ -267,7 +268,7 @@ vec3 SpiralOffset(vec3 direction, vec3 position, float distance, bool isSin)
     // Deterministic helix parameters (no animation).
     // "distance" is your parameter that moves along the helix.
     float angularFrequency = 12.0; // radians per world unit (tweak)
-    float angle = ((Parameters.ResolutionTime.z * Parameters.Runtime.x));
+    float angle = distance + ((Parameters.ResolutionTime.z * Parameters.Runtime.x));
 
     // Radius can be constant, or can grow with distance.
     // If you want it to start at exactly 0 radius at distance==0, use clamp(distance,...).
@@ -302,23 +303,24 @@ vec3 Shade(vec3 RayOrigin, vec3 RayDirection)
         return SkyColor(RayDirection);
     }
 
-    vec3 lightDirection = normalize(vec3(0.6, 0.9, -0.4));
+    //vec3 lightDirection = normalize(vec3(0.6, 0.9, -0.4));
+    vec3 lightDirection = normalize(Parameters.SunDirection);
     float NdotL = max(dot(SurfaceHit.Normal, lightDirection), 0.0);
 
-    // Manual two-ray "spiral sampling" (deterministic, no RNG, no time).
     vec3 shadowOrigin = SurfaceHit.Position + SurfaceHit.Normal * 0.01;
 
-    // Both start from the same "sample direction + distance" (no phase shift).
     float dist = SurfaceHit.Distance;
 
-    float visibility = 0.5 * (visSin + visCos);
+    const int ShadowSamples = 8;
 
-    int shadowSamples = 8;
+    float visibility = 0.0;
 
-    for (int i = 0; i < shadowSamples; i++)
+    for (int i = 0; i < ShadowSamples; i++)
     {
-        vec3 sinSpiral = SpiralOffset(lightDirection, SurfaceHit.Position, dist + i, true);
-        vec3 cosSpiral = SpiralOffset(lightDirection, SurfaceHit.Position, dist + i, false);
+        float sampleDist = float(i);
+
+        vec3 sinSpiral = SpiralOffset(lightDirection, SurfaceHit.Position, sampleDist, true);
+        vec3 cosSpiral = SpiralOffset(lightDirection, SurfaceHit.Position, sampleDist, false);
 
         vec3 shadowDirSin = normalize(lightDirection + sinSpiral);
         vec3 shadowDirCos = normalize(lightDirection + cosSpiral);
@@ -326,12 +328,13 @@ vec3 Shade(vec3 RayOrigin, vec3 RayDirection)
         bool inShadowSin = IsInShadow(shadowOrigin, vec3(0.0), shadowDirSin);
         bool inShadowCos = IsInShadow(shadowOrigin, vec3(0.0), shadowDirCos);
 
-        // Combine: average visibility of the two rays.
         float visSin = inShadowSin ? 0.0 : 1.0;
         float visCos = inShadowCos ? 0.0 : 1.0;
 
-        visibility += (0.5 * (visSin + visCos)) / (float)shadowSamples;
+        visibility += 0.5 * (visSin + visCos);
     }
+
+    visibility /= float(ShadowSamples);
 
     float ShadowMultiplier = mix(0.2, 1.0, visibility);
 

@@ -8,11 +8,12 @@
 [node name="RayMarching" type="Node3D" unique_id=246019854]
 script = ExtResource("1_jiyuc")
 
-[node name="Raymarcher" type="Node3D" parent="." unique_id=1835753409 node_paths=PackedStringArray("Camera")]
+[node name="Raymarcher" type="Node3D" parent="." unique_id=1835753409 node_paths=PackedStringArray("Camera", "Sun")]
 script = ExtResource("1_nxdnr")
 Camera = NodePath("../Camera3D")
+Sun = NodePath("../DirectionalLight3D")
 ShaderSource = ExtResource("2_5jh7u")
-JitterSpeed = 9999.0
+JitterSpeed = 4823.0
 
 [node name="UI" type="Control" parent="." unique_id=207436531]
 layout_mode = 3
@@ -35,3 +36,5 @@ flip_v = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
 script = ExtResource("3_q8rdf")
 SprintMultiplier = 4.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=539653969]

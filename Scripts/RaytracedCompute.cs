@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 public partial class RaytracedCompute : Node
 {
     [Export] public Camera3D Camera;
+    [Export] public DirectionalLight3D Sun;
     [Export] public RDShaderFile ShaderSource;
     [Export] public NodePath OutputTextureRectPath { get; set; } = "../UI/OutputTexture";
     [Export] public Vector2I Resolution { get; set; } = new Vector2I(960, 540);
@@ -34,6 +35,7 @@ public partial class RaytracedCompute : Node
         public Vector4 CamRight;
         public Vector4 CamUp;
         public Vector4 Runtime;
+        public Vector4 SunDirection;
     }
 
     public override void _Ready()
@@ -194,6 +196,9 @@ public partial class RaytracedCompute : Node
 
         _params.Runtime = new Vector4(JitterSpeed, 0.0f, 0.0f, 0.0f);
 
+        var sunDir = Sun.GlobalBasis.Z;
+        _params.SunDirection = new Vector4(sunDir.X, sunDir.Y, sunDir.Z, 0f);
+        
         return _params;
     }
 
