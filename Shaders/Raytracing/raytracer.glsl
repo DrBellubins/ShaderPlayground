@@ -1,10 +1,7 @@
 #[compute]
-
 #version 450
 
 layout(local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
-
-//layout(set = 0, binding = 0, rgba16f) uniform writeonly image2D u_output;
 
 layout(set = 0, binding = 0, rgba8) uniform writeonly image2D u_output;
 
@@ -18,176 +15,271 @@ layout(set = 0, binding = 1) uniform Params
     vec4 u_cam_up;             // xyz = up
 } params;
 
-float SdSphere(vec3 p, float r)
+const float INF = 1e30;
+const float EPS = 1e-4;
+
+struct Hit
 {
-    return length(p) - r;
-}
+    float t;
+    vec3 p;
+    vec3 n;
+    vec3 albedo;
+};
 
-float SdBox(vec3 p, vec3 b)
+struct Sphere
 {
-    vec3 q = abs(p) - b;
-    return length(max(q, 0.0)) + min(max(q.x, max(q.y, q.z)), 0.0);
-}
+    vec3 center;
+    float radius;
+    vec3 albedo;
+};
 
-// Infinite cone along +Y, centered at origin.
-// k = (sin(angle), cos(angle)) or just (radius/height normalized).
-float SdConeY(vec3 p, vec2 k)
+struct Plane
 {
-    vec2 q = vec2(length(p.xz), p.y);
-    float d = dot(q, k);
-    float e = dot(q, vec2(-k.y, k.x));
-    return max(e, -d);
-}
+    vec3 n;
+    float h;        // plane: dot(p, n) + h = 0
+    vec3 albedo;
+};
 
-float SdPlane(vec3 p, vec3 n, float h)
+struct Box
 {
-    return dot(p, n) + h;
-}
+    vec3 center;
+    vec3 halfExtents;
+    vec3 albedo;
+};
 
-float OpUnion(float a, float b)
+bool IntersectSphere(vec3 ro, vec3 rd, Sphere s, out float t, out vec3 n)
 {
-    return min(a, b);
-}
+    vec3 oc = ro - s.center;
 
-float MapScene(vec3 p)
-{
-    float d = SdPlane(p, vec3(0.0, 1.0, 0.0), 1.0);
+    float b = dot(oc, rd);
+    float c = dot(oc, oc) - s.radius * s.radius;
+    float h = b * b - c;
 
-    d = OpUnion(d, SdSphere(p - vec3(-1.2, -0.2, 3.5), 0.8));
-    d = OpUnion(d, SdBox(p - vec3(1.2, -0.2, 3.0), vec3(0.7)));
-
-    // Disable cone until we add a finite/capped one.
-    // vec3 pc = p - vec3(0.0, -1.0, 5.0);
-    // float cone = SdConeY(pc, normalize(vec2(0.6, 1.0)));
-    // d = OpUnion(d, cone);
-
-    return d;
-}
-
-/*float MapScene(vec3 p)
-{
-    // Ground plane y = -1
-    float d = SdPlane(p, vec3(0.0, 1.0, 0.0), 1.0);
-
-    // Sphere
-    d = OpUnion(d, SdSphere(p - vec3(-1.2, -0.2, 3.5), 0.8));
-
-    // Box (cube-ish)
-    d = OpUnion(d, SdBox(p - vec3(1.2, -0.2, 3.0), vec3(0.7)));
-
-    // Cone
-    vec3 pc = p - vec3(0.0, -1.0, 5.0);
-    float cone = SdConeY(pc, normalize(vec2(0.6, 1.0)));
-    d = OpUnion(d, cone);
-
-    return d;
-}*/
-
-vec3 EstimateNormal(vec3 p)
-{
-    float e = 0.001;
-
-    float dx = MapScene(p + vec3(e, 0.0, 0.0)) - MapScene(p - vec3(e, 0.0, 0.0));
-    float dy = MapScene(p + vec3(0.0, e, 0.0)) - MapScene(p - vec3(0.0, e, 0.0));
-    float dz = MapScene(p + vec3(0.0, 0.0, e)) - MapScene(p - vec3(0.0, 0.0, e));
-
-    vec3 n = vec3(dx, dy, dz);
-    float l = length(n);
-
-    // Avoid NaNs if gradient is near zero.
-    if (l < 1e-6)
+    if (h < 0.0)
     {
-        return vec3(0.0, 1.0, 0.0);
+        return false;
     }
 
-    return n / l;
+    h = sqrt(h);
+
+    float t0 = -b - h;
+    float t1 = -b + h;
+
+    float tt = t0;
+    if (tt < EPS)
+    {
+        tt = t1;
+    }
+
+    if (tt < EPS)
+    {
+        return false;
+    }
+
+    t = tt;
+
+    vec3 p = ro + rd * t;
+    n = normalize(p - s.center);
+
+    return true;
 }
 
-bool RayMarch(vec3 ro, vec3 rd, out vec3 hitPos, out float t)
+// Plane: dot(p, n) + h = 0
+bool IntersectPlane(vec3 ro, vec3 rd, Plane pl, out float t, out vec3 n)
 {
-    t = 0.0;
+    float denom = dot(rd, pl.n);
 
-    const float tMax = 80.0;
-    const int steps = 128;
-    const float hitEps = 0.001;
-
-    for (int i = 0; i < steps; i++)
+    if (abs(denom) < 1e-6)
     {
-        hitPos = ro + rd * t;
-        float d = MapScene(hitPos);
+        return false;
+    }
 
-        // Don't allow "hit at camera origin" due to negative SDF.
-        if (d < hitEps && t > 0.0)
+    float tt = -(dot(ro, pl.n) + pl.h) / denom;
+
+    if (tt < EPS)
+    {
+        return false;
+    }
+
+    t = tt;
+    n = pl.n;
+
+    // Ensure normal faces against the ray (optional, but nice for shading consistency)
+    if (dot(n, rd) > 0.0)
+    {
+        n = -n;
+    }
+
+    return true;
+}
+
+// Axis-aligned box centered at center with halfExtents (slab method).
+bool IntersectAabb(vec3 ro, vec3 rd, Box b, out float t, out vec3 n)
+{
+    vec3 minB = b.center - b.halfExtents;
+    vec3 maxB = b.center + b.halfExtents;
+
+    vec3 invD = 1.0 / rd;
+    vec3 t0 = (minB - ro) * invD;
+    vec3 t1 = (maxB - ro) * invD;
+
+    vec3 tmin3 = min(t0, t1);
+    vec3 tmax3 = max(t0, t1);
+
+    float tmin = max(max(tmin3.x, tmin3.y), tmin3.z);
+    float tmax = min(min(tmax3.x, tmax3.y), tmax3.z);
+
+    if (tmax < max(tmin, EPS))
+    {
+        return false;
+    }
+
+    float tt = tmin;
+    if (tt < EPS)
+    {
+        tt = tmax;
+    }
+
+    if (tt < EPS)
+    {
+        return false;
+    }
+
+    t = tt;
+
+    vec3 p = ro + rd * t;
+
+    // Compute normal by seeing which face we’re closest to.
+    vec3 c = p - b.center;
+    vec3 a = abs(c);
+    vec3 he = b.halfExtents;
+
+    // Pick dominant axis
+    if (a.x > a.y && a.x > a.z)
+    {
+        n = vec3(sign(c.x), 0.0, 0.0);
+    }
+    else if (a.y > a.z)
+    {
+        n = vec3(0.0, sign(c.y), 0.0);
+    }
+    else
+    {
+        n = vec3(0.0, 0.0, sign(c.z));
+    }
+
+    // Face against ray (optional)
+    if (dot(n, rd) > 0.0)
+    {
+        n = -n;
+    }
+
+    return true;
+}
+
+bool TraceScene(vec3 ro, vec3 rd, out Hit hit)
+{
+    hit.t = INF;
+
+    // Scene definition (matches your previous placements roughly)
+    Plane pl;
+    pl.n = vec3(0.0, 1.0, 0.0);
+    pl.h = 1.0; // y = -1
+    pl.albedo = vec3(0.8, 0.8, 0.8);
+
+    Sphere sp;
+    sp.center = vec3(-1.2, -0.2, 3.5);
+    sp.radius = 0.8;
+    sp.albedo = vec3(0.9, 0.9, 0.95);
+
+    Box bx;
+    bx.center = vec3(1.2, -0.2, 3.0);
+    bx.halfExtents = vec3(0.7, 0.7, 0.7);
+    bx.albedo = vec3(0.85, 0.85, 0.85);
+
+    // Intersect all and choose closest
+    float t;
+    vec3 n;
+
+    if (IntersectPlane(ro, rd, pl, t, n))
+    {
+        if (t < hit.t)
         {
-            return true;
+            hit.t = t;
+            hit.p = ro + rd * t;
+            hit.n = n;
+            hit.albedo = pl.albedo;
         }
+    }
 
-        // Always march forward at least a tiny amount.
-        t += max(d, 0.001);
-
-        if (t > tMax)
+    if (IntersectSphere(ro, rd, sp, t, n))
+    {
+        if (t < hit.t)
         {
-            break;
+            hit.t = t;
+            hit.p = ro + rd * t;
+            hit.n = n;
+            hit.albedo = sp.albedo;
         }
+    }
+
+    if (IntersectAabb(ro, rd, bx, t, n))
+    {
+        if (t < hit.t)
+        {
+            hit.t = t;
+            hit.p = ro + rd * t;
+            hit.n = n;
+            hit.albedo = bx.albedo;
+        }
+    }
+
+    return hit.t < INF;
+}
+
+vec3 SkyColor(vec3 rd)
+{
+    float k = 0.5 * (rd.y + 1.0);
+    return mix(vec3(0.08, 0.10, 0.14), vec3(0.35, 0.45, 0.65), k);
+}
+
+bool InShadow(vec3 p, vec3 n, vec3 lightDir)
+{
+    // Shadow ray: from a slightly offset point to avoid self-intersection
+    vec3 ro = p + n * 0.01;
+    vec3 rd = lightDir;
+
+    Hit h;
+    if (TraceScene(ro, rd, h))
+    {
+        return true;
     }
 
     return false;
 }
 
-/*vec3 Shade(vec3 ro, vec3 rd)
-{
-    vec3 p;
-    float t;
-
-    if (!RayMarch(ro, rd, p, t))
-    {
-        // Sky
-        float k = 0.5 * (rd.y + 1.0);
-        return mix(vec3(0.08, 0.10, 0.14), vec3(0.35, 0.45, 0.65), k);
-    }
-
-    vec3 n = EstimateNormal(p);
-
-    // Debug: visualize normal as color
-    return n * 0.5 + 0.5;
-}*/
-
 vec3 Shade(vec3 ro, vec3 rd)
 {
-    vec3 p;
-    float t;
-
-    if (!RayMarch(ro, rd, p, t))
+    Hit h;
+    if (!TraceScene(ro, rd, h))
     {
-        // Sky
-        float k = 0.5 * (rd.y + 1.0);
-        return mix(vec3(0.08, 0.10, 0.14), vec3(0.35, 0.45, 0.65), k);
+        return SkyColor(rd);
     }
 
-    vec3 n = EstimateNormal(p);
-
     vec3 lightDir = normalize(vec3(0.6, 0.9, -0.4));
-    float ndl = max(dot(n, lightDir), 0.0);
+    float ndl = max(dot(h.n, lightDir), 0.0);
 
-    // Simple shadow
-    vec3 sp;
-    float st;
-    bool shadowHit = RayMarch(p + n * 0.01, lightDir, sp, st);
-    float shadow = shadowHit ? 0.2 : 1.0;
+    float shadow = InShadow(h.p, h.n, lightDir) ? 0.2 : 1.0;
 
-    float ao = clamp(1.0 - t * 0.02, 0.0, 1.0);
+    vec3 ambient = vec3(0.10);
+    vec3 diffuse = h.albedo * ndl * shadow;
 
-    vec3 base = vec3(0.85);
-    vec3 col = base * (0.15 + ndl * 0.85) * shadow;
-    col *= ao;
-
-    return col;
+    return ambient + diffuse;
 }
 
 void main()
 {
     ivec2 pixel = ivec2(gl_GlobalInvocationID.xy);
-
     vec2 resolution = params.u_resolution_time.xy;
 
     if (pixel.x >= int(resolution.x) || pixel.y >= int(resolution.y))
