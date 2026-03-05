@@ -4,6 +4,8 @@ using System.Runtime.InteropServices;
 
 public partial class RaytracedCompute : Node
 {
+    [Export] public Resource ShaderSource;
+    
     [Export]
     public NodePath OutputTextureRectPath { get; set; }
 
@@ -99,7 +101,7 @@ public partial class RaytracedCompute : Node
     {
         // You must create an RDShaderFile resource in the editor that points to raytrace_sdf.compute.glsl
         // and assign it to this script or load it here. Keeping it minimal: load from res://
-        var shaderFile = GD.Load<RDShaderFile>("res://raytrace_sdf.compute.glsl");
+        var shaderFile = GD.Load<RDShaderFile>(ShaderSource.ResourcePath);
         var spirv = shaderFile.GetSpirV();
 
         _shaderRid = _rd.ShaderCreateFromSpirV(spirv);
