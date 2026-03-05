@@ -8,16 +8,14 @@ layout(local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
 
 layout(set = 0, binding = 0, rgba8) uniform writeonly image2D u_output;
 
+// Pack everything into vec4 to match UBO alignment easily.
 layout(set = 0, binding = 1) uniform Params
 {
-    vec2  u_resolution;
-    float u_time;
-
-    vec3  u_cam_pos;
-    vec3  u_cam_forward;
-    vec3  u_cam_right;
-    vec3  u_cam_up;
-    float u_fov_y;
+    vec4 u_resolution_time;    // xy = resolution, z = time, w = unused
+    vec4 u_cam_pos_fov;        // xyz = cam pos, w = fov_y
+    vec4 u_cam_forward;        // xyz = forward
+    vec4 u_cam_right;          // xyz = right
+    vec4 u_cam_up;             // xyz = up
 } params;
 
 float SdSphere(vec3 p, float r)
@@ -147,24 +145,25 @@ void main()
 {
     ivec2 pixel = ivec2(gl_GlobalInvocationID.xy);
 
-    if (pixel.x >= int(params.u_resolution.x) || pixel.y >= int(params.u_resolution.y))
+    vec2 resolution = params.u_resolution_time.xy;
+
+    if (pixel.x >= int(resolution.x) || pixel.y >= int(resolution.y))
     {
         return;
     }
 
-    // NDC in [-1, 1]
-    vec2 uv = (vec2(pixel) + vec2(0.5)) / params.u_resolution;
+    vec2 uv = (vec2(pixel) + vec2(0.5)) / resolution;
     vec2 ndc = uv * 2.0 - 1.0;
 
-    float aspect = params.u_resolution.x / params.u_resolution.y;
-    float tanHalfFov = tan(params.u_fov_y * 0.5);
+    float aspect = resolution.x / resolution.y;
+    float tanHalfFov = tan(params.u_cam_pos_fov.w * 0.5);
 
-    vec3 ro = params.u_cam_pos;
+    vec3 ro = params.u_cam_pos_fov.xyz;
 
     vec3 rd = normalize(
-        params.u_cam_forward
-        + params.u_cam_right * (ndc.x * aspect * tanHalfFov)
-        + params.u_cam_up * (ndc.y * tanHalfFov)
+        params.u_cam_forward.xyz
+        + params.u_cam_right.xyz * (ndc.x * aspect * tanHalfFov)
+        + params.u_cam_up.xyz * (ndc.y * tanHalfFov)
     );
 
     vec3 col = Shade(ro, rd);

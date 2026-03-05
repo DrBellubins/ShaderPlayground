@@ -26,14 +26,11 @@ public partial class RaytracedCompute : Node
     [StructLayout(LayoutKind.Sequential)]
     private struct Params
     {
-        public Vector2 Resolution;
-        public float Time;
-
-        public Vector3 CamPos;
-        public Vector3 CamForward;
-        public Vector3 CamRight;
-        public Vector3 CamUp;
-        public float FovY;
+        public Vector4 ResolutionTime;
+        public Vector4 CamPosFov;
+        public Vector4 CamForward;
+        public Vector4 CamRight;
+        public Vector4 CamUp;
     }
 
     public override void _Ready()
@@ -172,14 +169,19 @@ public partial class RaytracedCompute : Node
     private Params MakeParams()
     {
         Params p = new Params();
-        p.Resolution = new Vector2(Resolution.X, Resolution.Y);
-        p.Time = (float)Time.GetTicksMsec() * 0.001f;
 
-        p.CamPos = new Vector3(0.0f, 0.0f, -3.0f);
-        p.CamForward = new Vector3(0.0f, 0.0f, 1.0f);
-        p.CamRight = new Vector3(1.0f, 0.0f, 0.0f);
-        p.CamUp = new Vector3(0.0f, 1.0f, 0.0f);
-        p.FovY = Mathf.DegToRad(60.0f);
+        p.ResolutionTime = new Vector4(Resolution.X, Resolution.Y, (float)Time.GetTicksMsec() * 0.001f, 0.0f);
+
+        Vector3 camPos = new Vector3(0.0f, 0.0f, -3.0f);
+        p.CamPosFov = new Vector4(camPos.X, camPos.Y, camPos.Z, Mathf.DegToRad(60.0f));
+
+        Vector3 forward = new Vector3(0.0f, 0.0f, 1.0f);
+        Vector3 right = new Vector3(1.0f, 0.0f, 0.0f);
+        Vector3 up = new Vector3(0.0f, 1.0f, 0.0f);
+
+        p.CamForward = new Vector4(forward.X, forward.Y, forward.Z, 0.0f);
+        p.CamRight = new Vector4(right.X, right.Y, right.Z, 0.0f);
+        p.CamUp = new Vector4(up.X, up.Y, up.Z, 0.0f);
 
         return p;
     }
