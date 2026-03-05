@@ -16,9 +16,7 @@ vec2 viewport_size_px()
 
 vec2 rand(vec2 c)
 {
-    mat2 m = mat2(12.9898, 0.16180,
-                  78.233,  0.31415);
-
+    mat2 m = mat2(vec2(12.9898, 78.233), vec2(0.16180, 0.31415));
     return fract(sin(m * c) * vec2(43758.5453, 14142.1));
 }
 

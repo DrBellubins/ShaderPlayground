@@ -4,8 +4,10 @@
 [ext_resource type="PackedScene" uid="uid://ipr05trqec85" path="res://Prefabs/TiledCube.tscn" id="1_8np4j"]
 [ext_resource type="PackedScene" uid="uid://6uy72by2n7" path="res://Prefabs/Player.tscn" id="1_qg12j"]
 [ext_resource type="Environment" uid="uid://b4qrcwxw4e8u0" path="res://main_env.tres" id="4_c1f7b"]
+[ext_resource type="Material" uid="uid://csaqmerqhiesh" path="res://Materials/TestRainDrop.tres" id="5_c1by6"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_c1f7b"]
+material = ExtResource("5_c1by6")
 
 [node name="RainScene" type="Node3D" unique_id=1624505141]
 script = ExtResource("1_3rdh1")
@@ -27,6 +29,6 @@ shadow_enabled = true
 [node name="TiledCube2" parent="." unique_id=1141057990 instance=ExtResource("1_8np4j")]
 transform = Transform3D(5, 0, 0, 0, 3, 0, 0, 0, 0.5, -2.6909199, 2, 0.30154324)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1152869689]
+[node name="TestGlass" type="MeshInstance3D" parent="." unique_id=1152869689]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 2, 2)
 mesh = SubResource("QuadMesh_c1f7b")

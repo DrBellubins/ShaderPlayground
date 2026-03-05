@@ -27,8 +27,8 @@
 ./Models/Helmet/gltf/Material_001_Normal.png
 ./Models/Helmet/gltf/Material_001_Normal.png.import
 ./Models/Helmet/gltf/checker_Normal.png
+./Models/Helmet/gltf/Materials/Visor.tres
 ./Models/Helmet/gltf/Materials/Material.001.tres
-./Models/Helmet/gltf/Materials/Glass.tres
 ./Models/Helmet/gltf/Materials/Procedural Felt.tres
 ./Models/Helmet/gltf/Materials/Procedural Felt.002.tres
 ./Models/Helmet/gltf/Materials/visorlogo.tres
@@ -49,6 +49,8 @@
 ./.gitignore
 ./Shaders/Raytracing/raytracer.glsl
 ./Shaders/Raytracing/raytracer.glsl.import
+./Shaders/RainDropGlass.gdshader
+./Shaders/RainDropGlass.gdshader.uid
 ./icon.svg
 ./.godot/imported/n.png-26cf6e39dd0283b415119390af6ed46b.ctex
 ./.godot/imported/granite_tile_04_arm_2k.png-b493509d85ce016727ec51c9fc9dea30.ctex
@@ -255,9 +257,12 @@
 ./.godot/editor/CameraFly.cs-folding-176c5972e1b98ee065587bd99f6da2c7.cfg
 ./.godot/editor/Glass Transpearant Green Tint.tres-folding-429aa29c6b4591487c69e9c04395917c.cfg
 ./.godot/editor/Procedural Felt.001.tres-folding-166ccd525a487e304e178ab7f2422c6e.cfg
+./.godot/editor/Visor.tres-folding-ed1104965f3be076cc62d01d62dc0bdf.cfg
 ./.godot/editor/create_recent.Resource
 ./.godot/editor/Helmet.tscn-folding-c41495c07f6ef6e70860cddbcc4b8fb0.cfg
 ./.godot/editor/editor_script_doc_cache.res-folding-a7de57390d6e786984ca20c70a831128.cfg
+./.godot/editor/TestRainDrop.tres-folding-c8431cce47d4291666027cb6894d68fc.cfg
+./.godot/editor/RainDropGlass.gdshader-folding-62497504009e636330c133c896dd6f82.cfg
 ./.godot/editor/ray_marching.tscn-editstate-0ca52db6c9d97ab4d0981b31ab9fbd83.cfg
 ./.godot/editor/recent_dirs
 ./.godot/editor/TiledCube.tscn-folding-ceefa4dad0c8f6050790f0ad1801dcff.cfg
@@ -308,6 +313,7 @@
 ./Materials/Textures/granite_tile/granite_tile_04_arm_2k.png.import
 ./Materials/Textures/granite_tile/granite_tile_04_ao_2k.png
 ./Materials/Textures/granite_tile/granite_tile_04_diff_2k.png.import
+./Materials/TestRainDrop.tres
 ./Materials/granite_tile.tres
 ./ShaderPlayground.csproj
 ./Scripts/FPSController.cs.uid
