@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode unshaded, cull_disabled, depth_prepass_alpha;
+render_mode unshaded, cull_disabled, blend_mix;
 
 uniform sampler2D screen_tex : hint_screen_texture, filter_linear_mipmap;
 uniform float refraction_strength = 0.03; // try 0.01 - 0.08
@@ -86,9 +86,9 @@ void fragment()
         }
     }
 
-    //ALBEDO = col;
+    ALBEDO = col;
 	//ALBEDO = vec3(SCREEN_UV, 0.0);
-	ALBEDO = texture(screen_tex, SCREEN_UV).rgb;
+	//ALBEDO = texture(screen_tex, SCREEN_UV).rgb;
 
     // Optional: make the plane itself invisible except for refracted color
     ALPHA = 1.0;
