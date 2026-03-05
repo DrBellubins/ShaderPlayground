@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dl7fdvu7fjmd0" path="res://Scripts/RaytracedCompute.cs" id="1_nxdnr"]
 [ext_resource type="RDShaderFile" uid="uid://b3av0m4q4wvs2" path="res://Shaders/Raytracing/raytracer.glsl" id="2_5jh7u"]
-[ext_resource type="Script" uid="uid://ddfr61uwqgths" path="res://Scenes/CameraFly.cs" id="3_q8rdf"]
+[ext_resource type="Script" uid="uid://ddfr61uwqgths" path="res://Scripts/CameraFly.cs" id="3_q8rdf"]
 
 [node name="RayMarching" type="Node3D" unique_id=246019854]
 
