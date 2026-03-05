@@ -12,6 +12,7 @@ script = ExtResource("1_jiyuc")
 script = ExtResource("1_nxdnr")
 Camera = NodePath("../Camera3D")
 ShaderSource = ExtResource("2_5jh7u")
+JitterSpeed = 9999.0
 
 [node name="UI" type="Control" parent="." unique_id=207436531]
 layout_mode = 3

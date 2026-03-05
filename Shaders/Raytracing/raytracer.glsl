@@ -13,7 +13,7 @@ layout(set = 0, binding = 1) uniform Params
     vec4 CameraForward;     // xyz = forward
     vec4 CameraRight;       // xyz = right
     vec4 CameraUp;          // xyz = up
-    float JitterSpeed;      // How fast the spiral ray jitters
+    vec4 Runtime;           // x = JitterSpeed, yzw = reserved
 } Parameters;
 
 const float InfiniteDistance = 1e30;
@@ -254,23 +254,24 @@ bool IsInShadow(vec3 SurfacePosition, vec3 SurfaceNormal, vec3 LightDirection)
     return false;
 }
 
-vec3 SpiralOffset(vec3 direction, float distance, bool isSin)
+vec3 SpiralOffset(vec3 direction, vec3 position, float distance, bool isSin)
 {
-    vec3 d = normalize(direction);
+    //vec3 dir = position /*normalize(direction)*/;
+    vec3 dir = normalize(direction);
 
-    // Stable perpendicular frame around d.
-    vec3 up = (abs(d.y) < 0.99) ? vec3(0.0, 1.0, 0.0) : vec3(1.0, 0.0, 0.0);
-    vec3 tangent = normalize(cross(up, d));
-    vec3 bitangent = cross(d, tangent);
+    // Stable perpendicular frame around dir.
+    vec3 up = (abs(dir.y) < 0.99) ? vec3(0.0, 1.0, 0.0) : vec3(1.0, 0.0, 0.0);
+    vec3 tangent = normalize(cross(up, dir));
+    vec3 bitangent = cross(dir, tangent);
 
     // Deterministic helix parameters (no animation).
     // "distance" is your parameter that moves along the helix.
     float angularFrequency = 12.0; // radians per world unit (tweak)
-    float angle = ((Parameters.ResolutionTime.z * Parameters.JitterSpeed));
+    float angle = ((Parameters.ResolutionTime.z * Parameters.Runtime.x));
 
     // Radius can be constant, or can grow with distance.
     // If you want it to start at exactly 0 radius at distance==0, use clamp(distance,...).
-    float baseRadius = 0.08;       // tweak: overall offset scale
+    float baseRadius = 3.141592 * 0.01;       // tweak: overall offset scale
     float radiusGrowth = 0.0;     // tweak: set >0 to widen with distance
     float radius = baseRadius + (distance * radiusGrowth);
 
@@ -288,7 +289,7 @@ vec3 SpiralOffset(vec3 direction, float distance, bool isSin)
         b = sin(angle);
     }
 
-    // Offset stays perpendicular to d (a helix around the axis).
+    // Offset stays perpendicular to dir (a helix around the axis).
     vec3 offset = (tangent * a + bitangent * b) * radius;
     return offset;
 }
@@ -310,19 +311,27 @@ vec3 Shade(vec3 RayOrigin, vec3 RayDirection)
     // Both start from the same "sample direction + distance" (no phase shift).
     float dist = SurfaceHit.Distance;
 
-    vec3 sinSpiral = SpiralOffset(lightDirection, dist, true);
-    vec3 cosSpiral = SpiralOffset(lightDirection, dist, false);
-
-    vec3 shadowDirSin = normalize(lightDirection + sinSpiral);
-    vec3 shadowDirCos = normalize(lightDirection + cosSpiral);
-
-    bool inShadowSin = IsInShadow(shadowOrigin, vec3(0.0), shadowDirSin);
-    bool inShadowCos = IsInShadow(shadowOrigin, vec3(0.0), shadowDirCos);
-
-    // Combine: average visibility of the two rays.
-    float visSin = inShadowSin ? 0.0 : 1.0;
-    float visCos = inShadowCos ? 0.0 : 1.0;
     float visibility = 0.5 * (visSin + visCos);
+
+    int shadowSamples = 8;
+
+    for (int i = 0; i < shadowSamples; i++)
+    {
+        vec3 sinSpiral = SpiralOffset(lightDirection, SurfaceHit.Position, dist + i, true);
+        vec3 cosSpiral = SpiralOffset(lightDirection, SurfaceHit.Position, dist + i, false);
+
+        vec3 shadowDirSin = normalize(lightDirection + sinSpiral);
+        vec3 shadowDirCos = normalize(lightDirection + cosSpiral);
+
+        bool inShadowSin = IsInShadow(shadowOrigin, vec3(0.0), shadowDirSin);
+        bool inShadowCos = IsInShadow(shadowOrigin, vec3(0.0), shadowDirCos);
+
+        // Combine: average visibility of the two rays.
+        float visSin = inShadowSin ? 0.0 : 1.0;
+        float visCos = inShadowCos ? 0.0 : 1.0;
+
+        visibility += (0.5 * (visSin + visCos)) / (float)shadowSamples;
+    }
 
     float ShadowMultiplier = mix(0.2, 1.0, visibility);
 

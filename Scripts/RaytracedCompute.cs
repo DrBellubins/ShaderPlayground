@@ -33,7 +33,7 @@ public partial class RaytracedCompute : Node
         public Vector4 CamForward;
         public Vector4 CamRight;
         public Vector4 CamUp;
-        public float JitterSpeed;
+        public Vector4 Runtime;
     }
 
     public override void _Ready()
@@ -192,7 +192,7 @@ public partial class RaytracedCompute : Node
         _params.CamRight = new Vector4(right.X, right.Y, right.Z, 0.0f);
         _params.CamUp = new Vector4(up.X, up.Y, up.Z, 0.0f);
 
-        _params.JitterSpeed = JitterSpeed;
+        _params.Runtime = new Vector4(JitterSpeed, 0.0f, 0.0f, 0.0f);
 
         return _params;
     }
