@@ -106,6 +106,7 @@
 ./.godot/editor/ray_marching.tscn-editstate-0ca52db6c9d97ab4d0981b31ab9fbd83.cfg
 ./.godot/editor/filesystem_update4
 ./.godot/editor/favorites
+./.godot/editor/Hotkeys.cs-folding-317885f5fdede8cc5bf97aa6ff1ec0b9.cfg
 ./.godot/editor/filesystem_cache10
 ./.godot/editor/create_recent.Node
 ./.godot/editor/script_editor_cache.cfg
@@ -119,6 +120,8 @@
 ./ShaderPlayground.sln
 ./ShaderPlayground.csproj
 ./Scripts/RaytracedCompute.cs.uid
+./Scripts/Hotkeys.cs.uid
 ./Scripts/CameraFly.cs.uid
 ./Scripts/CameraFly.cs
+./Scripts/Hotkeys.cs
 ./Scripts/RaytracedCompute.cs

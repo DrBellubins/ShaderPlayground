@@ -1,10 +1,12 @@
 [gd_scene format=3 uid="uid://fdb01kc0n8eb"]
 
+[ext_resource type="Script" uid="uid://dy0qxn4a5xn1b" path="res://Scripts/Hotkeys.cs" id="1_jiyuc"]
 [ext_resource type="Script" uid="uid://dl7fdvu7fjmd0" path="res://Scripts/RaytracedCompute.cs" id="1_nxdnr"]
 [ext_resource type="RDShaderFile" uid="uid://b3av0m4q4wvs2" path="res://Shaders/Raytracing/raytracer.glsl" id="2_5jh7u"]
 [ext_resource type="Script" uid="uid://ddfr61uwqgths" path="res://Scripts/CameraFly.cs" id="3_q8rdf"]
 
 [node name="RayMarching" type="Node3D" unique_id=246019854]
+script = ExtResource("1_jiyuc")
 
 [node name="Raymarcher" type="Node3D" parent="." unique_id=1835753409 node_paths=PackedStringArray("Camera")]
 script = ExtResource("1_nxdnr")
@@ -31,4 +33,3 @@ flip_v = true
 [node name="Camera3D" type="Camera3D" parent="." unique_id=117526571]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
 script = ExtResource("3_q8rdf")
-Speed = 4.0

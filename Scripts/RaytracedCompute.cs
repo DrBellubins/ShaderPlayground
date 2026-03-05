@@ -182,9 +182,9 @@ public partial class RaytracedCompute : Node
         //Vector3 right = new Vector3(1.0f, 0.0f, 0.0f);
         //Vector3 up = new Vector3(0.0f, 1.0f, 0.0f);
         
-        Vector3 forward = Camera.Basis.Z;
-        Vector3 right = Camera.Basis.X;
-        Vector3 up = new Vector3(0.0f, 1.0f, 0.0f);
+        Vector3 forward = -Camera.GlobalTransform.Basis.Z;
+        Vector3 right = Camera.GlobalTransform.Basis.X;
+        Vector3 up = Camera.GlobalTransform.Basis.Y;
 
         p.CamForward = new Vector4(forward.X, forward.Y, forward.Z, 0.0f);
         p.CamRight = new Vector4(right.X, right.Y, right.Z, 0.0f);
