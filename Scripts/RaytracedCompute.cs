@@ -5,19 +5,17 @@ using System.Runtime.InteropServices;
 public partial class RaytracedCompute : Node
 {
     [Export] public RDShaderFile ShaderSource;
-
-    // Your scene tree is: Raymarcher (this script) -> ../UI/OutputTexture
     [Export] public NodePath OutputTextureRectPath { get; set; } = "../UI/OutputTexture";
-
     [Export] public Vector2I Resolution { get; set; } = new Vector2I(960, 540);
 
     private RenderingDevice _rd;
+
     private Rid _shaderRid;
     private Rid _pipelineRid;
 
     private Rid _outputTexRid;
 
-    private Rid _paramsBufferRid;
+    private Rid _paramsBufferRid; // UniformBuffer
     private Rid _uniformSetRid;
 
     private TextureRect _output;
@@ -45,7 +43,7 @@ public partial class RaytracedCompute : Node
 
         if (ShaderSource == null)
         {
-            GD.PushError("RaytracedCompute: ShaderSource is null. Assign the imported RDShaderFile for res://Shaders/Raytracing/raytracer.glsl");
+            GD.PushError("RaytracedCompute: ShaderSource is null.");
             _ok = false;
             return;
         }
@@ -56,20 +54,6 @@ public partial class RaytracedCompute : Node
         SetupDisplay();
 
         _ok = _pipelineRid.IsValid && _uniformSetRid.IsValid && _outputTexRid.IsValid;
-    }
-
-    public override void _ExitTree()
-    {
-        if (_rd == null)
-        {
-            return;
-        }
-
-        FreeRid(ref _uniformSetRid);
-        FreeRid(ref _paramsBufferRid);
-        FreeRid(ref _outputTexRid);
-        FreeRid(ref _pipelineRid);
-        FreeRid(ref _shaderRid);
     }
 
     public override void _Process(double delta)
@@ -93,28 +77,26 @@ public partial class RaytracedCompute : Node
         tf.Mipmaps = 1;
         tf.TextureType = RenderingDevice.TextureType.Type2D;
 
-        // Use RGBA8 for easy readback -> Image -> UI
         tf.Format = RenderingDevice.DataFormat.R8G8B8A8Unorm;
         tf.UsageBits =
             RenderingDevice.TextureUsageBits.StorageBit |
             RenderingDevice.TextureUsageBits.CanCopyFromBit;
 
         RDTextureView tv = new RDTextureView();
-
         Godot.Collections.Array<byte[]> initialData = new Godot.Collections.Array<byte[]>();
+
         _outputTexRid = _rd.TextureCreate(tf, tv, initialData);
     }
 
     private void CreateComputePipeline()
     {
         RDShaderSpirV spirv = ShaderSource.GetSpirV();
-
         _shaderRid = _rd.ShaderCreateFromSpirV(spirv);
         _pipelineRid = _rd.ComputePipelineCreate(_shaderRid);
 
         if (!_pipelineRid.IsValid)
         {
-            GD.PushError("RaytracedCompute: compute pipeline invalid. Check shader import errors and ensure raytracer.glsl starts with #[compute].");
+            GD.PushError("RaytracedCompute: compute pipeline invalid. Check shader import errors.");
         }
     }
 
@@ -123,7 +105,8 @@ public partial class RaytracedCompute : Node
         Params p = MakeParams();
         byte[] bytes = StructToBytes(p);
 
-        _paramsBufferRid = _rd.StorageBufferCreate((uint)bytes.Length, bytes);
+        // IMPORTANT: shader uses `uniform Params { ... }`, so this must be a UniformBuffer.
+        _paramsBufferRid = _rd.UniformBufferCreate((uint)bytes.Length, bytes);
 
         RDUniform u0 = new RDUniform();
         u0.UniformType = RenderingDevice.UniformType.Image;
@@ -131,17 +114,23 @@ public partial class RaytracedCompute : Node
         u0.AddId(_outputTexRid);
 
         RDUniform u1 = new RDUniform();
-        u1.UniformType = RenderingDevice.UniformType.StorageBuffer;
+        u1.UniformType = RenderingDevice.UniformType.UniformBuffer;
         u1.Binding = 1;
         u1.AddId(_paramsBufferRid);
 
         _uniformSetRid = _rd.UniformSetCreate(new Godot.Collections.Array<RDUniform> { u0, u1 }, _shaderRid, 0);
+
+        if (!_uniformSetRid.IsValid)
+        {
+            GD.PushError("RaytracedCompute: uniform set invalid.");
+        }
     }
 
     private void DispatchCompute()
     {
         Params p = MakeParams();
         byte[] bytes = StructToBytes(p);
+
         _rd.BufferUpdate(_paramsBufferRid, 0, (uint)bytes.Length, bytes);
 
         long list = _rd.ComputeListBegin();
@@ -164,7 +153,6 @@ public partial class RaytracedCompute : Node
         _imageTexture = ImageTexture.CreateFromImage(img);
 
         _output.Texture = _imageTexture;
-        _output.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
         _output.StretchMode = TextureRect.StretchModeEnum.Scale;
     }
 
@@ -214,14 +202,5 @@ public partial class RaytracedCompute : Node
         }
 
         return arr;
-    }
-
-    private void FreeRid(ref Rid rid)
-    {
-        if (rid.IsValid)
-        {
-            _rd.FreeRid(rid);
-            rid = default;
-        }
     }
 }
