@@ -36,7 +36,7 @@ public partial class RaytracedCompute : Node
     public override void _Ready()
     {
         _output = GetNode<TextureRect>(OutputTextureRectPath);
-        _rd = RenderingServer.GetRenderingDevice();
+        _rd = RenderingServer.CreateLocalRenderingDevice();
 
         if (ShaderSource == null)
         {
