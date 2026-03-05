@@ -51,6 +51,21 @@ float OpUnion(float a, float b)
 
 float MapScene(vec3 p)
 {
+    float d = SdPlane(p, vec3(0.0, 1.0, 0.0), 1.0);
+
+    d = OpUnion(d, SdSphere(p - vec3(-1.2, -0.2, 3.5), 0.8));
+    d = OpUnion(d, SdBox(p - vec3(1.2, -0.2, 3.0), vec3(0.7)));
+
+    // Disable cone until we add a finite/capped one.
+    // vec3 pc = p - vec3(0.0, -1.0, 5.0);
+    // float cone = SdConeY(pc, normalize(vec2(0.6, 1.0)));
+    // d = OpUnion(d, cone);
+
+    return d;
+}
+
+/*float MapScene(vec3 p)
+{
     // Ground plane y = -1
     float d = SdPlane(p, vec3(0.0, 1.0, 0.0), 1.0);
 
@@ -66,7 +81,7 @@ float MapScene(vec3 p)
     d = OpUnion(d, cone);
 
     return d;
-}
+}*/
 
 vec3 EstimateNormal(vec3 p)
 {
@@ -101,12 +116,14 @@ bool RayMarch(vec3 ro, vec3 rd, out vec3 hitPos, out float t)
         hitPos = ro + rd * t;
         float d = MapScene(hitPos);
 
-        if (d < hitEps)
+        // Don't allow "hit at camera origin" due to negative SDF.
+        if (d < hitEps && t > 0.0)
         {
             return true;
         }
 
-        t += d;
+        // Always march forward at least a tiny amount.
+        t += max(d, 0.001);
 
         if (t > tMax)
         {
@@ -117,7 +134,7 @@ bool RayMarch(vec3 ro, vec3 rd, out vec3 hitPos, out float t)
     return false;
 }
 
-vec3 Shade(vec3 ro, vec3 rd)
+/*vec3 Shade(vec3 ro, vec3 rd)
 {
     vec3 p;
     float t;
@@ -133,9 +150,9 @@ vec3 Shade(vec3 ro, vec3 rd)
 
     // Debug: visualize normal as color
     return n * 0.5 + 0.5;
-}
+}*/
 
-/*vec3 Shade(vec3 ro, vec3 rd)
+vec3 Shade(vec3 ro, vec3 rd)
 {
     vec3 p;
     float t;
@@ -165,7 +182,7 @@ vec3 Shade(vec3 ro, vec3 rd)
     col *= ao;
 
     return col;
-}*/
+}
 
 void main()
 {
