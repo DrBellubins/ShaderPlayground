@@ -1,5 +1,3 @@
-./Scenes/CameraFly.cs.uid
-./Scenes/CameraFly.cs
 ./Scenes/ray_marching.tscn
 ./.gitattributes
 ./.idea/.idea.ShaderPlayground/.idea/encodings.xml
@@ -103,9 +101,11 @@
 ./.godot/editor/project_metadata.cfg
 ./.godot/editor/raytracer.glsl-6e9ba00aadd9578e4f2d2e6b79c11206.res-folding-ec5a6d52fa0f62cdaf0f1a5a69178343.cfg
 ./.godot/editor/editor_layout.cfg
+./.godot/editor/favorite_properties
 ./.godot/editor/CameraFly.cs-folding-176c5972e1b98ee065587bd99f6da2c7.cfg
 ./.godot/editor/ray_marching.tscn-editstate-0ca52db6c9d97ab4d0981b31ab9fbd83.cfg
 ./.godot/editor/filesystem_update4
+./.godot/editor/favorites
 ./.godot/editor/filesystem_cache10
 ./.godot/editor/create_recent.Node
 ./.godot/editor/script_editor_cache.cfg
@@ -119,4 +119,6 @@
 ./ShaderPlayground.sln
 ./ShaderPlayground.csproj
 ./Scripts/RaytracedCompute.cs.uid
+./Scripts/CameraFly.cs.uid
+./Scripts/CameraFly.cs
 ./Scripts/RaytracedCompute.cs
