@@ -13,6 +13,7 @@ layout(set = 0, binding = 1) uniform Params
     vec4 CameraForward;     // xyz = forward
     vec4 CameraRight;       // xyz = right
     vec4 CameraUp;          // xyz = up
+    float JitterSpeed;      // How fast the spiral ray jitters
 } Parameters;
 
 const float InfiniteDistance = 1e30;
@@ -257,32 +258,40 @@ vec3 SpiralOffset(vec3 direction, float distance, bool isSin)
 {
     vec3 d = normalize(direction);
 
-    // Pick a stable basis (T, B) perpendicular to d.
+    // Stable perpendicular frame around d.
     vec3 up = (abs(d.y) < 0.99) ? vec3(0.0, 1.0, 0.0) : vec3(1.0, 0.0, 0.0);
     vec3 tangent = normalize(cross(up, d));
     vec3 bitangent = cross(d, tangent);
 
-    float t = distance + (Parameters.ResolutionTime.z * 1000.0);
+    // Deterministic helix parameters (no animation).
+    // "distance" is your parameter that moves along the helix.
+    float angularFrequency = 12.0; // radians per world unit (tweak)
+    float angle = ((Parameters.ResolutionTime.z * Parameters.JitterSpeed));
 
-    // "Spiral" parameters (tweak these).
-    float angularSpeed = 6.0;  // radians/sec-ish
-    float radialSpeed = 2.0;   // how fast radius changes
-    float maxRadius = 0.03;    // offset magnitude (keep small)
+    // Radius can be constant, or can grow with distance.
+    // If you want it to start at exactly 0 radius at distance==0, use clamp(distance,...).
+    float baseRadius = 0.08;       // tweak: overall offset scale
+    float radiusGrowth = 0.0;     // tweak: set >0 to widen with distance
+    float radius = baseRadius + (distance * radiusGrowth);
 
-    float angle = t * angularSpeed;
+    float a;
+    float b;
 
-    // A radius that pulses; this makes the offset feel spiral-ish when combined with the rotating angle.
-    float radius = maxRadius * (0.5 + 0.5 * sin(t * radialSpeed));
+    if (isSin)
+    {
+        a = sin(angle);
+        b = cos(angle);
+    }
+    else
+    {
+        a = cos(angle);
+        b = sin(angle);
+    }
 
-    float a = isSin ? sin(angle) : cos(angle);
-    float b = isSin ? cos(angle) : sin(angle);
-
-    // Offset lies in the plane perpendicular to direction.
+    // Offset stays perpendicular to d (a helix around the axis).
     vec3 offset = (tangent * a + bitangent * b) * radius;
-
     return offset;
 }
-
 
 vec3 Shade(vec3 RayOrigin, vec3 RayDirection)
 {
@@ -293,34 +302,28 @@ vec3 Shade(vec3 RayOrigin, vec3 RayDirection)
     }
 
     vec3 lightDirection = normalize(vec3(0.6, 0.9, -0.4));
-
     float NdotL = max(dot(SurfaceHit.Normal, lightDirection), 0.0);
 
-    // Soft shadow sampling: deterministic spiral offsets (no RNG).
-    // More samples = softer + slower.
-    const int ShadowSamples = 8;
+    // Manual two-ray "spiral sampling" (deterministic, no RNG, no time).
+    vec3 shadowOrigin = SurfaceHit.Position + SurfaceHit.Normal * 0.01;
 
-    // Controls penumbra size. You can also scale this by SurfaceHit.Distance if you want.
-    float softness = 1.2;
+    // Both start from the same "sample direction + distance" (no phase shift).
+    float dist = SurfaceHit.Distance;
 
-    float visibility = 0.0;
+    vec3 sinSpiral = SpiralOffset(lightDirection, dist, true);
+    vec3 cosSpiral = SpiralOffset(lightDirection, dist, false);
 
-    for (int i = 0; i < ShadowSamples; i++)
-    {
-        // Use a deterministic "time" parameter for SpiralOffset:
-        // distance + per-sample phase shift
-        float phase = float(i) * 0.35;
+    vec3 shadowDirSin = normalize(lightDirection + sinSpiral);
+    vec3 shadowDirCos = normalize(lightDirection + cosSpiral);
 
-        vec3 offset = SpiralOffset(lightDirection, phase, true) * softness;
-        vec3 spiralLightDir = normalize(lightDirection + offset);
+    bool inShadowSin = IsInShadow(shadowOrigin, vec3(0.0), shadowDirSin);
+    bool inShadowCos = IsInShadow(shadowOrigin, vec3(0.0), shadowDirCos);
 
-        bool inShadow = IsInShadow(SurfaceHit.Position, SurfaceHit.Normal, spiralLightDir);
-        visibility += inShadow ? 0.0 : 1.0;
-    }
+    // Combine: average visibility of the two rays.
+    float visSin = inShadowSin ? 0.0 : 1.0;
+    float visCos = inShadowCos ? 0.0 : 1.0;
+    float visibility = 0.5 * (visSin + visCos);
 
-    visibility /= float(ShadowSamples);
-
-    // Map visibility into a multiplier similar to your original 0.2/1.0.
     float ShadowMultiplier = mix(0.2, 1.0, visibility);
 
     vec3 AmbientLight = vec3(0.10);

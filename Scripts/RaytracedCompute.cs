@@ -8,7 +8,8 @@ public partial class RaytracedCompute : Node
     [Export] public RDShaderFile ShaderSource;
     [Export] public NodePath OutputTextureRectPath { get; set; } = "../UI/OutputTexture";
     [Export] public Vector2I Resolution { get; set; } = new Vector2I(960, 540);
-
+    [Export] public float JitterSpeed = 100f;
+    
     private RenderingDevice _rd;
 
     private Rid _shaderRid;
@@ -32,6 +33,7 @@ public partial class RaytracedCompute : Node
         public Vector4 CamForward;
         public Vector4 CamRight;
         public Vector4 CamUp;
+        public float JitterSpeed;
     }
 
     public override void _Ready()
@@ -100,8 +102,8 @@ public partial class RaytracedCompute : Node
 
     private void CreateUniforms()
     {
-        Params p = MakeParams();
-        byte[] bytes = StructToBytes(p);
+        Params _params = MakeParams();
+        byte[] bytes = StructToBytes(_params);
 
         // IMPORTANT: shader uses `uniform Params { ... }`, so this must be a UniformBuffer.
         _paramsBufferRid = _rd.UniformBufferCreate((uint)bytes.Length, bytes);
@@ -126,8 +128,8 @@ public partial class RaytracedCompute : Node
 
     private void DispatchCompute()
     {
-        Params p = MakeParams();
-        byte[] bytes = StructToBytes(p);
+        Params _params = MakeParams();
+        byte[] bytes = StructToBytes(_params);
 
         _rd.BufferUpdate(_paramsBufferRid, 0, (uint)bytes.Length, bytes);
 
@@ -169,14 +171,14 @@ public partial class RaytracedCompute : Node
 
     private Params MakeParams()
     {
-        Params p = new Params();
+        Params _params = new Params();
 
-        p.ResolutionTime = new Vector4(Resolution.X, Resolution.Y, (float)Time.GetTicksMsec() * 0.001f, 0.0f);
+        _params.ResolutionTime = new Vector4(Resolution.X, Resolution.Y, (float)Time.GetTicksMsec() * 0.001f, 0.0f);
 
         //Vector3 camPos = new Vector3(0.0f, 0.0f, -3.0f);
         Vector3 camPos = Camera.Position;
         
-        p.CamPosFov = new Vector4(camPos.X, camPos.Y, camPos.Z, Mathf.DegToRad(60.0f));
+        _params.CamPosFov = new Vector4(camPos.X, camPos.Y, camPos.Z, Mathf.DegToRad(60.0f));
 
         //Vector3 forward = new Vector3(0.0f, 0.0f, 1.0f);
         //Vector3 right = new Vector3(1.0f, 0.0f, 0.0f);
@@ -186,11 +188,13 @@ public partial class RaytracedCompute : Node
         Vector3 right = Camera.GlobalTransform.Basis.X;
         Vector3 up = Camera.GlobalTransform.Basis.Y;
 
-        p.CamForward = new Vector4(forward.X, forward.Y, forward.Z, 0.0f);
-        p.CamRight = new Vector4(right.X, right.Y, right.Z, 0.0f);
-        p.CamUp = new Vector4(up.X, up.Y, up.Z, 0.0f);
+        _params.CamForward = new Vector4(forward.X, forward.Y, forward.Z, 0.0f);
+        _params.CamRight = new Vector4(right.X, right.Y, right.Z, 0.0f);
+        _params.CamUp = new Vector4(up.X, up.Y, up.Z, 0.0f);
 
-        return p;
+        _params.JitterSpeed = JitterSpeed;
+
+        return _params;
     }
 
     private static byte[] StructToBytes<T>(T data) where T : struct
