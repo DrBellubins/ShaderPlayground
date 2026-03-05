@@ -253,11 +253,34 @@ bool IsInShadow(vec3 SurfacePosition, vec3 SurfaceNormal, vec3 LightDirection)
     return false;
 }
 
-vec3 SpiralOffset(vec3 direction, bool isSin)
+vec3 SpiralOffset(vec3 direction, float distance, bool isSin)
 {
-    // Create a spiral in direction with sin/cos based on isSin.
-    // Make it not ray-marched, this is to be used as an offset
-    // To RayDirection.
+    vec3 d = normalize(direction);
+
+    // Pick a stable basis (T, B) perpendicular to d.
+    vec3 up = (abs(d.y) < 0.99) ? vec3(0.0, 1.0, 0.0) : vec3(1.0, 0.0, 0.0);
+    vec3 tangent = normalize(cross(up, d));
+    vec3 bitangent = cross(d, tangent);
+
+    float t = distance;
+
+    // "Spiral" parameters (tweak these).
+    float angularSpeed = 6.0;  // radians/sec-ish
+    float radialSpeed = 2.0;   // how fast radius changes
+    float maxRadius = 0.03;    // offset magnitude (keep small)
+
+    float angle = t * angularSpeed;
+
+    // A radius that pulses; this makes the offset feel spiral-ish when combined with the rotating angle.
+    float radius = maxRadius * (0.5 + 0.5 * sin(t * radialSpeed));
+
+    float a = isSin ? sin(angle) : cos(angle);
+    float b = isSin ? cos(angle) : sin(angle);
+
+    // Offset lies in the plane perpendicular to direction.
+    vec3 offset = (tangent * a + bitangent * b) * radius;
+
+    return offset;
 }
 
 vec3 Shade(vec3 RayOrigin, vec3 RayDirection)
@@ -269,7 +292,7 @@ vec3 Shade(vec3 RayOrigin, vec3 RayDirection)
     }
 
     vec3 lightDirection = normalize(vec3(0.6, 0.9, -0.4));
-    vec3 shadowDir = lightDirection *
+    vec3 shadowDir = lightDirection * SpiralOffset(lightDirection, SurfaceHit.Distance, true);
 
     float NdotL = max(dot(SurfaceHit.Normal, lightDirection), 0.0);
 
