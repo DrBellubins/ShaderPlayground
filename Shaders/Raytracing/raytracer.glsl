@@ -20,10 +20,10 @@ const float EPS = 1e-4;
 
 struct Hit
 {
-    float t;
-    vec3 p;
-    vec3 n;
-    vec3 albedo;
+    float Distance;
+    vec3 Position;
+    vec3 Normal;
+    vec3 Albedo;
 };
 
 struct Sphere
@@ -179,7 +179,7 @@ bool IntersectAabb(vec3 ro, vec3 rd, Box b, out float t, out vec3 n)
 
 bool TraceScene(vec3 ro, vec3 rd, out Hit hit)
 {
-    hit.t = INF;
+    hit.Distance = INF;
 
     // Scene definition (matches your previous placements roughly)
     Plane pl;
@@ -203,38 +203,38 @@ bool TraceScene(vec3 ro, vec3 rd, out Hit hit)
 
     if (IntersectPlane(ro, rd, pl, t, n))
     {
-        if (t < hit.t)
+        if (t < hit.Distance)
         {
-            hit.t = t;
-            hit.p = ro + rd * t;
+            hit.Distance = t;
+            hit.Position = ro + rd * t;
             hit.n = n;
-            hit.albedo = pl.albedo;
+            hit.Albedo = pl.albedo;
         }
     }
 
     if (IntersectSphere(ro, rd, sp, t, n))
     {
-        if (t < hit.t)
+        if (t < hit.Distance)
         {
-            hit.t = t;
-            hit.p = ro + rd * t;
+            hit.Distance = t;
+            hit.Position = ro + rd * t;
             hit.n = n;
-            hit.albedo = sp.albedo;
+            hit.Albedo = sp.albedo;
         }
     }
 
     if (IntersectAabb(ro, rd, bx, t, n))
     {
-        if (t < hit.t)
+        if (t < hit.Distance)
         {
-            hit.t = t;
-            hit.p = ro + rd * t;
+            hit.Distance = t;
+            hit.Position = ro + rd * t;
             hit.n = n;
-            hit.albedo = bx.albedo;
+            hit.Albedo = bx.albedo;
         }
     }
 
-    return hit.t < INF;
+    return hit.Distance < INF;
 }
 
 vec3 SkyColor(vec3 rd)
