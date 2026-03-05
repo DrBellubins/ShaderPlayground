@@ -11,6 +11,10 @@ uniform float alpha_gain = 1.0;          // overall opacity multiplier for dropl
 uniform float alpha_softness = 0.15;     // 0..0.5-ish, higher = softer edges
 uniform float min_alpha = 0.0;           // keep at 0 for fully invisible background
 
+// Out-of-focus blur controls (applies only inside droplets)
+uniform float blur_radius_px = 2.0;      // 0 = sharp, try 1..6
+uniform float blur_strength = 1.0;       // 0..1, how much the blur replaces sharp refraction
+
 vec2 viewport_size_px()
 {
     return vec2(textureSize(screen_tex, 0));
@@ -34,6 +38,39 @@ vec2 noise(vec2 p)
     vec2 d = rand((co + vec2(1.0, 1.0)));
 
     return mix(mix(a, b, mu.x), mix(c, d, mu.x), mu.y);
+}
+
+vec3 sample_screen_blur_9tap(vec2 uv, float radius_px)
+{
+    vec2 vp = viewport_size_px();
+    vec2 texel = vec2(1.0) / vp;
+
+    vec2 o = texel * radius_px;
+
+    // 9-tap (center + cross + diagonals), Gaussian-ish weights
+    vec3 c0 = texture(screen_tex, uv).rgb;
+
+    vec3 c1 = texture(screen_tex, uv + vec2( o.x, 0.0)).rgb;
+    vec3 c2 = texture(screen_tex, uv + vec2(-o.x, 0.0)).rgb;
+    vec3 c3 = texture(screen_tex, uv + vec2(0.0,  o.y)).rgb;
+    vec3 c4 = texture(screen_tex, uv + vec2(0.0, -o.y)).rgb;
+
+    vec3 c5 = texture(screen_tex, uv + vec2( o.x,  o.y)).rgb;
+    vec3 c6 = texture(screen_tex, uv + vec2(-o.x,  o.y)).rgb;
+    vec3 c7 = texture(screen_tex, uv + vec2( o.x, -o.y)).rgb;
+    vec3 c8 = texture(screen_tex, uv + vec2(-o.x, -o.y)).rgb;
+
+    // Weights sum to 1.0
+    // center: 0.25
+    // cross:  0.125 * 4 = 0.5
+    // diag:   0.0625 * 4 = 0.25
+    vec3 sum = vec3(0.0);
+    sum += c0 * 0.25;
+
+    sum += (c1 + c2 + c3 + c4) * 0.125;
+    sum += (c5 + c6 + c7 + c8) * 0.0625;
+
+    return sum;
 }
 
 void fragment()
@@ -67,39 +104,38 @@ void fragment()
 
         float fade = max(0.0, 1.0 - fract(ttime * (d.b + 0.1) + d.g) * 2.0);
 
-        // This is your original "t"
         float t = (s.x + s.y) * fade;
 
-        // Decide if a drop exists in this cell (same logic as before)
         bool has_drop = (d.r < (5.0 - r) * 0.08);
 
         if (has_drop)
         {
-            // Turn your old hard cutoff (t > 0.5) into a soft mask.
-            // When t == 0.5 => center threshold, softness defines edge width.
             float local_mask = smoothstep(0.5 - alpha_softness, 0.5 + alpha_softness, t);
-
-            // Accumulate coverage. Max is simplest and looks good for “either a drop is here or not”.
             drop_mask = max(drop_mask, local_mask);
 
-            // Only refract where this drop is active (prevents random refraction outside droplets)
             if (local_mask > 0.001)
             {
                 vec3 drop_n = normalize(-vec3(cos(p), mix(0.2, 2.0, t - 0.5)));
                 vec2 offset = drop_n.xy * refraction_strength;
 
-                vec3 refr_col = texture(screen_tex, screen_uv - offset).rgb;
+                vec2 refr_uv = screen_uv - offset;
 
-                // Blend refraction by mask (so edges are softer)
+                // Sharp refraction
+                vec3 refr_sharp = texture(screen_tex, refr_uv).rgb;
+
+                // Blurred refraction (only if radius > 0)
+                float rpx = max(0.0, blur_radius_px);
+                vec3 refr_blur = sample_screen_blur_9tap(refr_uv, rpx);
+
+                vec3 refr_col = mix(refr_sharp, refr_blur, clamp(blur_strength, 0.0, 1.0));
+
                 col = mix(col, refr_col, local_mask);
             }
         }
     }
 
-    // Output
     ALBEDO = col;
 
-    // Droplets-only alpha
     float a = clamp(drop_mask * alpha_gain, 0.0, 1.0);
     a = max(a, min_alpha);
 
