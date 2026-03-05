@@ -253,7 +253,7 @@ bool IsInShadow(vec3 SurfacePosition, vec3 SurfaceNormal, vec3 LightDirection)
     return false;
 }
 
-vec3 SpiralOffset(vec3 direction, float distance, bool isSin)
+vec3 SpiralOffset(vec3 direction, bool isSin)
 {
     vec3 d = normalize(direction);
 
@@ -262,7 +262,7 @@ vec3 SpiralOffset(vec3 direction, float distance, bool isSin)
     vec3 tangent = normalize(cross(up, d));
     vec3 bitangent = cross(d, tangent);
 
-    float t = distance;
+    float t = Parameters.ResolutionTime.z;
 
     // "Spiral" parameters (tweak these).
     float angularSpeed = 6.0;  // radians/sec-ish
@@ -292,11 +292,33 @@ vec3 Shade(vec3 RayOrigin, vec3 RayDirection)
     }
 
     vec3 lightDirection = normalize(vec3(0.6, 0.9, -0.4));
-    vec3 shadowDir = lightDirection * SpiralOffset(lightDirection, SurfaceHit.Distance, true);
 
-    float NdotL = max(dot(SurfaceHit.Normal, lightDirection), 0.0);
+    // Soft shadow sampling: deterministic spiral offsets (no RNG).
+    // More samples = softer + slower.
+    const int ShadowSamples = 8;
 
-    float ShadowMultiplier = IsInShadow(SurfaceHit.Position, SurfaceHit.Normal, lightDirection) ? 0.2 : 1.0;
+    // Controls penumbra size. You can also scale this by SurfaceHit.Distance if you want.
+    float softness = 0.08;
+
+    float visibility = 0.0;
+
+    for (int i = 0; i < ShadowSamples; i++)
+    {
+        // Use a deterministic "time" parameter for SpiralOffset:
+        // distance + per-sample phase shift
+        float phase = SurfaceHit.Distance + float(i) * 0.35;
+
+        vec3 offset = SpiralOffset(lightDirection, phase, true) * softness;
+        vec3 spiralLightDir = normalize(lightDirection + offset);
+
+        bool inShadow = IsInShadow(SurfaceHit.Position, SurfaceHit.Normal, spiralLightDir);
+        visibility += inShadow ? 0.0 : 1.0;
+    }
+
+    visibility /= float(ShadowSamples);
+
+    // Map visibility into a multiplier similar to your original 0.2/1.0.
+    float ShadowMultiplier = mix(0.2, 1.0, visibility);
 
     vec3 AmbientLight = vec3(0.10);
     vec3 DiffuseLight = SurfaceHit.Albedo * NdotL * ShadowMultiplier;
