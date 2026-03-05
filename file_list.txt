@@ -1,3 +1,5 @@
+./Scenes/CameraFly.cs.uid
+./Scenes/CameraFly.cs
 ./Scenes/ray_marching.tscn
 ./.gitattributes
 ./.idea/.idea.ShaderPlayground/.idea/encodings.xml
@@ -73,7 +75,9 @@
 ./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/7412c254abd0f944fb53942228920fe187f1d723.vulkan.cache
 ./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/7a6b05ba6ca90f8a542e0d1fcc3360f7d52c6e09.vulkan.cache
 ./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/a38af1e47720abf30ca44f3d3c099c07b046df81.vulkan.cache
+./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/715f7f95b6842bf66262e2a58fb864970126ecf4.vulkan.cache
 ./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/7d4c2429f20db9b651852713d31971380f209eec.vulkan.cache
+./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/6371e69b888c685a23ccea3d75bce814b90f23d7.vulkan.cache
 ./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/f88424e725a3bb50f358e9b042552af7b1c2f921.vulkan.cache
 ./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/35a078cb7dc07df55e460ed1a913486a68ab6bb0.vulkan.cache
 ./.godot/shader_cache/SceneForwardClusteredShaderRD/ddf71e2b0a93f8f42fc8827ef66052f76ea3654cfcd999e621135fc1399a5a79/ab0b960474f1491b42ef9f2ca13dbd4ccaf64911.vulkan.cache
@@ -89,6 +93,7 @@
 ./.godot/shader_cache/GiShaderRD/6070f5e18c68008ac051ae26b1c87390602864b854189b373129b03383b95c1d/087916079fba7c625e62b0c2cca570e0fb87c99a.vulkan.cache
 ./.godot/shader_cache/CanvasShaderRD/275d4d34e3615bf0802f2ef82109d1cde17c7aa8031e89154c70fc7b3d40d52f/45fb1ddc6499e56682916a355ce2839e61f42dfe.vulkan.cache
 ./.godot/shader_cache/CanvasShaderRD/275d4d34e3615bf0802f2ef82109d1cde17c7aa8031e89154c70fc7b3d40d52f/087916079fba7c625e62b0c2cca570e0fb87c99a.vulkan.cache
+./.godot/shader_cache/CanvasShaderRD/275d4d34e3615bf0802f2ef82109d1cde17c7aa8031e89154c70fc7b3d40d52f/4d35b4f1b981d75cb121b24f26aba4271d0d7a2f.vulkan.cache
 ./.godot/shader_cache/CanvasShaderRD/275d4d34e3615bf0802f2ef82109d1cde17c7aa8031e89154c70fc7b3d40d52f/f3e258e8f7ec2e7e740b62f3bc48ecf5c99fb0db.vulkan.cache
 ./.godot/shader_cache/CanvasShaderRD/275d4d34e3615bf0802f2ef82109d1cde17c7aa8031e89154c70fc7b3d40d52f/c0a681ae42aa3e0b5abba232ccae0b036be455e4.vulkan.cache
 ./.godot/shader_cache/CanvasShaderRD/275d4d34e3615bf0802f2ef82109d1cde17c7aa8031e89154c70fc7b3d40d52f/8a7277c8d3ac029b087c3fa9c55de85560be5119.vulkan.cache
@@ -98,10 +103,13 @@
 ./.godot/editor/project_metadata.cfg
 ./.godot/editor/raytracer.glsl-6e9ba00aadd9578e4f2d2e6b79c11206.res-folding-ec5a6d52fa0f62cdaf0f1a5a69178343.cfg
 ./.godot/editor/editor_layout.cfg
+./.godot/editor/CameraFly.cs-folding-176c5972e1b98ee065587bd99f6da2c7.cfg
 ./.godot/editor/ray_marching.tscn-editstate-0ca52db6c9d97ab4d0981b31ab9fbd83.cfg
 ./.godot/editor/filesystem_update4
 ./.godot/editor/filesystem_cache10
+./.godot/editor/create_recent.Node
 ./.godot/editor/script_editor_cache.cfg
+./.godot/editor/favorites.Node
 ./.godot/editor/ray_marching.tscn-folding-0ca52db6c9d97ab4d0981b31ab9fbd83.cfg
 ./.godot/mono/metadata/ide_messaging_meta.txt
 ./.godot/uid_cache.bin

@@ -2,11 +2,13 @@
 
 [ext_resource type="Script" uid="uid://dl7fdvu7fjmd0" path="res://Scripts/RaytracedCompute.cs" id="1_nxdnr"]
 [ext_resource type="RDShaderFile" uid="uid://b3av0m4q4wvs2" path="res://Shaders/Raytracing/raytracer.glsl" id="2_5jh7u"]
+[ext_resource type="Script" uid="uid://ddfr61uwqgths" path="res://Scenes/CameraFly.cs" id="3_q8rdf"]
 
 [node name="RayMarching" type="Node3D" unique_id=246019854]
 
-[node name="Raymarcher" type="Node3D" parent="." unique_id=1835753409]
+[node name="Raymarcher" type="Node3D" parent="." unique_id=1835753409 node_paths=PackedStringArray("Camera")]
 script = ExtResource("1_nxdnr")
+Camera = NodePath("../Camera3D")
 ShaderSource = ExtResource("2_5jh7u")
 
 [node name="UI" type="Control" parent="." unique_id=207436531]
@@ -24,3 +26,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+flip_v = true
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=117526571]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+script = ExtResource("3_q8rdf")

@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 
 public partial class RaytracedCompute : Node
 {
+    [Export] public Camera3D Camera;
     [Export] public RDShaderFile ShaderSource;
     [Export] public NodePath OutputTextureRectPath { get; set; } = "../UI/OutputTexture";
     [Export] public Vector2I Resolution { get; set; } = new Vector2I(960, 540);
@@ -172,11 +173,17 @@ public partial class RaytracedCompute : Node
 
         p.ResolutionTime = new Vector4(Resolution.X, Resolution.Y, (float)Time.GetTicksMsec() * 0.001f, 0.0f);
 
-        Vector3 camPos = new Vector3(0.0f, 0.0f, -3.0f);
+        //Vector3 camPos = new Vector3(0.0f, 0.0f, -3.0f);
+        Vector3 camPos = Camera.Position;
+        
         p.CamPosFov = new Vector4(camPos.X, camPos.Y, camPos.Z, Mathf.DegToRad(60.0f));
 
-        Vector3 forward = new Vector3(0.0f, 0.0f, 1.0f);
-        Vector3 right = new Vector3(1.0f, 0.0f, 0.0f);
+        //Vector3 forward = new Vector3(0.0f, 0.0f, 1.0f);
+        //Vector3 right = new Vector3(1.0f, 0.0f, 0.0f);
+        //Vector3 up = new Vector3(0.0f, 1.0f, 0.0f);
+        
+        Vector3 forward = Camera.Basis.Z;
+        Vector3 right = Camera.Basis.X;
         Vector3 up = new Vector3(0.0f, 1.0f, 0.0f);
 
         p.CamForward = new Vector4(forward.X, forward.Y, forward.Z, 0.0f);
