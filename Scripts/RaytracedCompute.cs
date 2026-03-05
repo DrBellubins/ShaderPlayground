@@ -6,7 +6,8 @@ public partial class RaytracedCompute : Node
 {
     [Export] public RDShaderFile ShaderSource;
 
-    [Export] public NodePath OutputTextureRectPath { get; set; }
+    // Your scene tree is: Raymarcher (this script) -> ../UI/OutputTexture
+    [Export] public NodePath OutputTextureRectPath { get; set; } = "../UI/OutputTexture";
 
     [Export] public Vector2I Resolution { get; set; } = new Vector2I(960, 540);
 
@@ -21,6 +22,8 @@ public partial class RaytracedCompute : Node
 
     private TextureRect _output;
     private ImageTexture _imageTexture;
+
+    private bool _ok;
 
     [StructLayout(LayoutKind.Sequential)]
     private struct Params
@@ -38,13 +41,21 @@ public partial class RaytracedCompute : Node
     public override void _Ready()
     {
         _output = GetNode<TextureRect>(OutputTextureRectPath);
-
         _rd = RenderingServer.GetRenderingDevice();
+
+        if (ShaderSource == null)
+        {
+            GD.PushError("RaytracedCompute: ShaderSource is null. Assign the imported RDShaderFile for res://Shaders/Raytracing/raytracer.glsl");
+            _ok = false;
+            return;
+        }
 
         CreateOutputTexture();
         CreateComputePipeline();
         CreateUniforms();
         SetupDisplay();
+
+        _ok = _pipelineRid.IsValid && _uniformSetRid.IsValid && _outputTexRid.IsValid;
     }
 
     public override void _ExitTree()
@@ -56,23 +67,19 @@ public partial class RaytracedCompute : Node
 
         FreeRid(ref _uniformSetRid);
         FreeRid(ref _paramsBufferRid);
-
         FreeRid(ref _outputTexRid);
-
         FreeRid(ref _pipelineRid);
         FreeRid(ref _shaderRid);
     }
 
     public override void _Process(double delta)
     {
-        if (_rd == null)
+        if (!_ok)
         {
             return;
         }
 
-        DispatchCompute((float)delta);
-
-        // Minimal display path: GPU -> CPU -> ImageTexture (slow but simple)
+        DispatchCompute();
         UpdateDisplayFromGpu();
     }
 
@@ -85,46 +92,37 @@ public partial class RaytracedCompute : Node
         tf.ArrayLayers = 1;
         tf.Mipmaps = 1;
         tf.TextureType = RenderingDevice.TextureType.Type2D;
-        tf.Format = RenderingDevice.DataFormat.R16G16B16A16Sfloat;
+
+        // Use RGBA8 for easy readback -> Image -> UI
+        tf.Format = RenderingDevice.DataFormat.R8G8B8A8Unorm;
         tf.UsageBits =
             RenderingDevice.TextureUsageBits.StorageBit |
             RenderingDevice.TextureUsageBits.CanCopyFromBit;
 
         RDTextureView tv = new RDTextureView();
 
-        // Godot C# expects Godot.Collections.Array<byte[]>
         Godot.Collections.Array<byte[]> initialData = new Godot.Collections.Array<byte[]>();
-
         _outputTexRid = _rd.TextureCreate(tf, tv, initialData);
     }
 
     private void CreateComputePipeline()
     {
-        if (ShaderSource == null)
-        {
-            GD.PushError("ShaderSource is null. Assign the RDShaderFile that imports Shaders/Raytracing/raytracer.glsl.");
-            return;
-        }
-
         RDShaderSpirV spirv = ShaderSource.GetSpirV();
 
         _shaderRid = _rd.ShaderCreateFromSpirV(spirv);
         _pipelineRid = _rd.ComputePipelineCreate(_shaderRid);
+
+        if (!_pipelineRid.IsValid)
+        {
+            GD.PushError("RaytracedCompute: compute pipeline invalid. Check shader import errors and ensure raytracer.glsl starts with #[compute].");
+        }
     }
 
     private void CreateUniforms()
     {
-        Params p = new Params();
-        p.Resolution = new Vector2(Resolution.X, Resolution.Y);
-        p.Time = 0.0f;
-
-        p.CamPos = new Vector3(0.0f, 0.0f, -3.0f);
-        p.CamForward = new Vector3(0.0f, 0.0f, 1.0f);
-        p.CamRight = new Vector3(1.0f, 0.0f, 0.0f);
-        p.CamUp = new Vector3(0.0f, 1.0f, 0.0f);
-        p.FovY = Mathf.DegToRad(60.0f);
-
+        Params p = MakeParams();
         byte[] bytes = StructToBytes(p);
+
         _paramsBufferRid = _rd.StorageBufferCreate((uint)bytes.Length, bytes);
 
         RDUniform u0 = new RDUniform();
@@ -140,18 +138,9 @@ public partial class RaytracedCompute : Node
         _uniformSetRid = _rd.UniformSetCreate(new Godot.Collections.Array<RDUniform> { u0, u1 }, _shaderRid, 0);
     }
 
-    private void DispatchCompute(float delta)
+    private void DispatchCompute()
     {
-        Params p = new Params();
-        p.Resolution = new Vector2(Resolution.X, Resolution.Y);
-        p.Time = (float)Time.GetTicksMsec() * 0.001f;
-
-        p.CamPos = new Vector3(0.0f, 0.0f, -3.0f);
-        p.CamForward = new Vector3(0.0f, 0.0f, 1.0f);
-        p.CamRight = new Vector3(1.0f, 0.0f, 0.0f);
-        p.CamUp = new Vector3(0.0f, 1.0f, 0.0f);
-        p.FovY = Mathf.DegToRad(60.0f);
-
+        Params p = MakeParams();
         byte[] bytes = StructToBytes(p);
         _rd.BufferUpdate(_paramsBufferRid, 0, (uint)bytes.Length, bytes);
 
@@ -181,21 +170,30 @@ public partial class RaytracedCompute : Node
 
     private void UpdateDisplayFromGpu()
     {
-        // Readback from GPU. Then convert to RGBA8 for UI.
-        // Godot returns an Image in the texture's format.
-        Image img = _rd.TextureGetData(_outputTexRid, 0);
+        byte[] data = _rd.TextureGetData(_outputTexRid, 0);
 
-        if (img == null)
+        if (data == null || data.Length == 0)
         {
             return;
         }
 
-        if (img.GetFormat() != Image.Format.Rgba8)
-        {
-            img.Convert(Image.Format.Rgba8);
-        }
-
+        Image img = Image.CreateFromData(Resolution.X, Resolution.Y, false, Image.Format.Rgba8, data);
         _imageTexture.Update(img);
+    }
+
+    private Params MakeParams()
+    {
+        Params p = new Params();
+        p.Resolution = new Vector2(Resolution.X, Resolution.Y);
+        p.Time = (float)Time.GetTicksMsec() * 0.001f;
+
+        p.CamPos = new Vector3(0.0f, 0.0f, -3.0f);
+        p.CamForward = new Vector3(0.0f, 0.0f, 1.0f);
+        p.CamRight = new Vector3(1.0f, 0.0f, 0.0f);
+        p.CamUp = new Vector3(0.0f, 1.0f, 0.0f);
+        p.FovY = Mathf.DegToRad(60.0f);
+
+        return p;
     }
 
     private static byte[] StructToBytes<T>(T data) where T : struct

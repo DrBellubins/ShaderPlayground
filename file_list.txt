@@ -13,6 +13,8 @@
 ./Shaders/Raytracing/raytracer.glsl.import
 ./icon.svg
 ./.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.md5
+./.godot/imported/raytracer.glsl-6e9ba00aadd9578e4f2d2e6b79c11206.md5
+./.godot/imported/raytracer.glsl-6e9ba00aadd9578e4f2d2e6b79c11206.res
 ./.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex
 ./.godot/.gdignore
 ./.godot/shader_cache/CopyShaderRD/e9cc8703737058ab94419d921c4ffa210eedec9e9902e44b4b3b0898bea779ad/087916079fba7c625e62b0c2cca570e0fb87c99a.vulkan.cache
@@ -93,7 +95,11 @@
 ./.godot/shader_cache/OctmapRoughnessShaderRD/953daee2b7c11cf846dd5b590a624c33a6d367972b684494ecbbb5fdeb8e9b1f/087916079fba7c625e62b0c2cca570e0fb87c99a.vulkan.cache
 ./.godot/global_script_class_cache.cfg
 ./.godot/scene_groups_cache.cfg
+./.godot/editor/project_metadata.cfg
+./.godot/editor/raytracer.glsl-6e9ba00aadd9578e4f2d2e6b79c11206.res-folding-ec5a6d52fa0f62cdaf0f1a5a69178343.cfg
 ./.godot/editor/editor_layout.cfg
+./.godot/editor/ray_marching.tscn-editstate-0ca52db6c9d97ab4d0981b31ab9fbd83.cfg
+./.godot/editor/filesystem_update4
 ./.godot/editor/filesystem_cache10
 ./.godot/editor/script_editor_cache.cfg
 ./.godot/editor/ray_marching.tscn-folding-0ca52db6c9d97ab4d0981b31ab9fbd83.cfg

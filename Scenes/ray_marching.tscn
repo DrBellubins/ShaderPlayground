@@ -1,11 +1,13 @@
 [gd_scene format=3 uid="uid://fdb01kc0n8eb"]
 
 [ext_resource type="Script" uid="uid://dl7fdvu7fjmd0" path="res://Scripts/RaytracedCompute.cs" id="1_nxdnr"]
+[ext_resource type="RDShaderFile" uid="uid://b3av0m4q4wvs2" path="res://Shaders/Raytracing/raytracer.glsl" id="2_5jh7u"]
 
 [node name="RayMarching" type="Node3D" unique_id=246019854]
 
 [node name="Raymarcher" type="Node3D" parent="." unique_id=1835753409]
 script = ExtResource("1_nxdnr")
+ShaderSource = ExtResource("2_5jh7u")
 
 [node name="UI" type="Control" parent="." unique_id=207436531]
 layout_mode = 3
