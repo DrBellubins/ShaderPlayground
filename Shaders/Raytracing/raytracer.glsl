@@ -71,13 +71,21 @@ float MapScene(vec3 p)
 vec3 EstimateNormal(vec3 p)
 {
     float e = 0.001;
-    vec2 h = vec2(e, 0.0);
 
-    float dx = MapScene(p + vec3(h.x, h.y, h.y)) - MapScene(p - vec3(h.x, h.y, h.y));
-    float dy = MapScene(p + vec3(h.y, h.x, h.y)) - MapScene(p - vec3(h.y, h.x, h.y));
-    float dz = MapScene(p + vec3(h.y, h.y, h.x)) - MapScene(p - vec3(h.y, h.y, h.x));
+    float dx = MapScene(p + vec3(e, 0.0, 0.0)) - MapScene(p - vec3(e, 0.0, 0.0));
+    float dy = MapScene(p + vec3(0.0, e, 0.0)) - MapScene(p - vec3(0.0, e, 0.0));
+    float dz = MapScene(p + vec3(0.0, 0.0, e)) - MapScene(p - vec3(0.0, 0.0, e));
 
-    return normalize(vec3(dx, dy, dz));
+    vec3 n = vec3(dx, dy, dz);
+    float l = length(n);
+
+    // Avoid NaNs if gradient is near zero.
+    if (l < 1e-6)
+    {
+        return vec3(0.0, 1.0, 0.0);
+    }
+
+    return n / l;
 }
 
 bool RayMarch(vec3 ro, vec3 rd, out vec3 hitPos, out float t)
@@ -123,6 +131,24 @@ vec3 Shade(vec3 ro, vec3 rd)
 
     vec3 n = EstimateNormal(p);
 
+    // Debug: visualize normal as color
+    return n * 0.5 + 0.5;
+}
+
+/*vec3 Shade(vec3 ro, vec3 rd)
+{
+    vec3 p;
+    float t;
+
+    if (!RayMarch(ro, rd, p, t))
+    {
+        // Sky
+        float k = 0.5 * (rd.y + 1.0);
+        return mix(vec3(0.08, 0.10, 0.14), vec3(0.35, 0.45, 0.65), k);
+    }
+
+    vec3 n = EstimateNormal(p);
+
     vec3 lightDir = normalize(vec3(0.6, 0.9, -0.4));
     float ndl = max(dot(n, lightDir), 0.0);
 
@@ -139,7 +165,7 @@ vec3 Shade(vec3 ro, vec3 rd)
     col *= ao;
 
     return col;
-}
+}*/
 
 void main()
 {
