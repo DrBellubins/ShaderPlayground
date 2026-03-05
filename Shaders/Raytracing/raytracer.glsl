@@ -253,7 +253,7 @@ bool IsInShadow(vec3 SurfacePosition, vec3 SurfaceNormal, vec3 LightDirection)
     return false;
 }
 
-vec3 SpiralOffset(vec3 direction, bool isSin)
+vec3 SpiralOffset(vec3 direction, float distance, bool isSin)
 {
     vec3 d = normalize(direction);
 
@@ -262,7 +262,7 @@ vec3 SpiralOffset(vec3 direction, bool isSin)
     vec3 tangent = normalize(cross(up, d));
     vec3 bitangent = cross(d, tangent);
 
-    float t = Parameters.ResolutionTime.z;
+    float t = distance + (Parameters.ResolutionTime.z * 1000.0);
 
     // "Spiral" parameters (tweak these).
     float angularSpeed = 6.0;  // radians/sec-ish
@@ -283,6 +283,7 @@ vec3 SpiralOffset(vec3 direction, bool isSin)
     return offset;
 }
 
+
 vec3 Shade(vec3 RayOrigin, vec3 RayDirection)
 {
     Hit SurfaceHit;
@@ -293,12 +294,14 @@ vec3 Shade(vec3 RayOrigin, vec3 RayDirection)
 
     vec3 lightDirection = normalize(vec3(0.6, 0.9, -0.4));
 
+    float NdotL = max(dot(SurfaceHit.Normal, lightDirection), 0.0);
+
     // Soft shadow sampling: deterministic spiral offsets (no RNG).
     // More samples = softer + slower.
     const int ShadowSamples = 8;
 
     // Controls penumbra size. You can also scale this by SurfaceHit.Distance if you want.
-    float softness = 0.08;
+    float softness = 1.2;
 
     float visibility = 0.0;
 
@@ -306,7 +309,7 @@ vec3 Shade(vec3 RayOrigin, vec3 RayDirection)
     {
         // Use a deterministic "time" parameter for SpiralOffset:
         // distance + per-sample phase shift
-        float phase = SurfaceHit.Distance + float(i) * 0.35;
+        float phase = float(i) * 0.35;
 
         vec3 offset = SpiralOffset(lightDirection, phase, true) * softness;
         vec3 spiralLightDir = normalize(lightDirection + offset);
