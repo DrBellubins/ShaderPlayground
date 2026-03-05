@@ -10,6 +10,7 @@ public partial class RaytracedCompute : Node
     [Export] public NodePath OutputTextureRectPath { get; set; } = "../UI/OutputTexture";
     [Export] public Vector2I Resolution { get; set; } = new Vector2I(960, 540);
     [Export] public float JitterSpeed = 100f;
+    [Export] public float Radius = 0.01f;
     
     private RenderingDevice _rd;
 
@@ -26,6 +27,9 @@ public partial class RaytracedCompute : Node
 
     private bool _ok;
 
+    private float deltaTime = 0f;
+    private float time = 0f;
+    
     [StructLayout(LayoutKind.Sequential)]
     private struct Params
     {
@@ -60,6 +64,9 @@ public partial class RaytracedCompute : Node
 
     public override void _Process(double delta)
     {
+        deltaTime = (float)delta;
+        time += deltaTime;
+        
         if (!_ok)
         {
             return;
@@ -175,7 +182,8 @@ public partial class RaytracedCompute : Node
     {
         Params _params = new Params();
 
-        _params.ResolutionTime = new Vector4(Resolution.X, Resolution.Y, (float)Time.GetTicksMsec() * 0.001f, 0.0f);
+        _params.ResolutionTime = new Vector4(Resolution.X, Resolution.Y,
+            Time.GetTicksMsec() * 0.001f, time);
 
         //Vector3 camPos = new Vector3(0.0f, 0.0f, -3.0f);
         Vector3 camPos = Camera.Position;
@@ -194,7 +202,7 @@ public partial class RaytracedCompute : Node
         _params.CamRight = new Vector4(right.X, right.Y, right.Z, 0.0f);
         _params.CamUp = new Vector4(up.X, up.Y, up.Z, 0.0f);
 
-        _params.Runtime = new Vector4(JitterSpeed, 0.0f, 0.0f, 0.0f);
+        _params.Runtime = new Vector4(JitterSpeed, Radius, 0.0f, 0.0f);
 
         var sunDir = Sun.GlobalBasis.Z;
         _params.SunDirection = new Vector4(sunDir.X, sunDir.Y, sunDir.Z, 0f);

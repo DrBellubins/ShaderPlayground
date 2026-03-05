@@ -13,7 +13,8 @@ script = ExtResource("1_nxdnr")
 Camera = NodePath("../Camera3D")
 Sun = NodePath("../DirectionalLight3D")
 ShaderSource = ExtResource("2_5jh7u")
-JitterSpeed = 4823.0
+JitterSpeed = 2405.0
+Radius = 0.005
 
 [node name="UI" type="Control" parent="." unique_id=207436531]
 layout_mode = 3
@@ -33,8 +34,9 @@ grow_vertical = 2
 flip_v = true
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=117526571]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
 script = ExtResource("3_q8rdf")
 SprintMultiplier = 4.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=539653969]
+transform = Transform3D(0.44463512, 0.32827947, -0.833386, 0, 0.9304176, 0.3665012, 0.8957118, -0.1629593, 0.41369635, 0, 0, 0)

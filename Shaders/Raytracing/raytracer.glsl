@@ -255,7 +255,7 @@ bool IsInShadow(vec3 SurfacePosition, vec3 SurfaceNormal, vec3 LightDirection)
     return false;
 }
 
-vec3 SpiralOffset(vec3 direction, vec3 position, float distance, bool isSin)
+vec3 SpiralOffset(vec3 direction, vec3 position, float _offset, bool isSin)
 {
     //vec3 dir = position /*normalize(direction)*/;
     vec3 dir = normalize(direction);
@@ -266,15 +266,15 @@ vec3 SpiralOffset(vec3 direction, vec3 position, float distance, bool isSin)
     vec3 bitangent = cross(dir, tangent);
 
     // Deterministic helix parameters (no animation).
-    // "distance" is your parameter that moves along the helix.
-    float angularFrequency = 12.0; // radians per world unit (tweak)
-    float angle = distance + ((Parameters.ResolutionTime.z * Parameters.Runtime.x));
+    //float angularFrequency = 12.0; // radians per world unit (tweak)
+    float angle = _offset * ((Parameters.ResolutionTime.w * Parameters.Runtime.x));
 
     // Radius can be constant, or can grow with distance.
     // If you want it to start at exactly 0 radius at distance==0, use clamp(distance,...).
-    float baseRadius = 3.141592 * 0.01;       // tweak: overall offset scale
-    float radiusGrowth = 0.0;     // tweak: set >0 to widen with distance
-    float radius = baseRadius + (distance * radiusGrowth);
+    //float baseRadius = 3.141592 * 0.033331;       // tweak: overall offset scale
+    float baseRadius = Parameters.Runtime.y;
+    float radiusGrowth = Parameters.Runtime.y;     // tweak: set >0 to widen with distance
+    float radius = baseRadius + (_offset * radiusGrowth);
 
     float a;
     float b;
@@ -304,7 +304,7 @@ vec3 Shade(vec3 RayOrigin, vec3 RayDirection)
     }
 
     //vec3 lightDirection = normalize(vec3(0.6, 0.9, -0.4));
-    vec3 lightDirection = normalize(Parameters.SunDirection);
+    vec3 lightDirection = normalize(Parameters.SunDirection.xyz);
     float NdotL = max(dot(SurfaceHit.Normal, lightDirection), 0.0);
 
     vec3 shadowOrigin = SurfaceHit.Position + SurfaceHit.Normal * 0.01;
@@ -317,7 +317,7 @@ vec3 Shade(vec3 RayOrigin, vec3 RayDirection)
 
     for (int i = 0; i < ShadowSamples; i++)
     {
-        float sampleDist = float(i);
+        float sampleDist = dist * float(i);
 
         vec3 sinSpiral = SpiralOffset(lightDirection, SurfaceHit.Position, sampleDist, true);
         vec3 cosSpiral = SpiralOffset(lightDirection, SurfaceHit.Position, sampleDist, false);
