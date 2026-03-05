@@ -49,7 +49,7 @@ void fragment()
 
     // Start with the background behind the plane
     vec2 screen_uv = SCREEN_UV;
-    vec3 col = textureLod(screen_tex, screen_uv, 2.5).rgb;
+    vec3 col = texture(screen_tex, screen_uv).rgb;
 
     float ttime = TIME * time_scale;
 
@@ -86,7 +86,9 @@ void fragment()
         }
     }
 
-    ALBEDO = col;
+    //ALBEDO = col;
+	//ALBEDO = vec3(SCREEN_UV, 0.0);
+	ALBEDO = texture(screen_tex, SCREEN_UV).rgb;
 
     // Optional: make the plane itself invisible except for refracted color
     ALPHA = 1.0;
