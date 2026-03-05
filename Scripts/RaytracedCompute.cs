@@ -11,6 +11,7 @@ public partial class RaytracedCompute : Node
     [Export] public Vector2I Resolution { get; set; } = new Vector2I(960, 540);
     [Export] public float JitterSpeed = 100f;
     [Export] public float Radius = 0.01f;
+    [Export] public float RadiusGrowth = 0.01f;
     
     private RenderingDevice _rd;
 
@@ -202,7 +203,7 @@ public partial class RaytracedCompute : Node
         _params.CamRight = new Vector4(right.X, right.Y, right.Z, 0.0f);
         _params.CamUp = new Vector4(up.X, up.Y, up.Z, 0.0f);
 
-        _params.Runtime = new Vector4(JitterSpeed, Radius, 0.0f, 0.0f);
+        _params.Runtime = new Vector4(JitterSpeed, Radius, RadiusGrowth, 0.0f);
 
         var sunDir = Sun.GlobalBasis.Z;
         _params.SunDirection = new Vector4(sunDir.X, sunDir.Y, sunDir.Z, 0f);

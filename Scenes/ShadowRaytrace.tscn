@@ -5,7 +5,7 @@
 [ext_resource type="RDShaderFile" uid="uid://dbnfht14dqqf8" path="res://Shaders/Raytracing/raytracer.glsl" id="2_5jh7u"]
 [ext_resource type="Script" uid="uid://ddfr61uwqgths" path="res://Scripts/CameraFly.cs" id="3_q8rdf"]
 
-[node name="RayMarching" type="Node3D" unique_id=246019854]
+[node name="ShadowRaytrace" type="Node3D" unique_id=246019854]
 script = ExtResource("1_jiyuc")
 
 [node name="Raymarcher" type="Node3D" parent="." unique_id=1835753409 node_paths=PackedStringArray("Camera", "Sun")]
@@ -13,8 +13,9 @@ script = ExtResource("1_nxdnr")
 Camera = NodePath("../Camera3D")
 Sun = NodePath("../DirectionalLight3D")
 ShaderSource = ExtResource("2_5jh7u")
-JitterSpeed = 2405.0
-Radius = 0.005
+JitterSpeed = 18.0
+Radius = 0.02
+RadiusGrowth = 0.0
 
 [node name="UI" type="Control" parent="." unique_id=207436531]
 layout_mode = 3
@@ -39,4 +40,4 @@ script = ExtResource("3_q8rdf")
 SprintMultiplier = 4.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=539653969]
-transform = Transform3D(0.44463512, 0.32827947, -0.833386, 0, 0.9304176, 0.3665012, 0.8957118, -0.1629593, 0.41369635, 0, 0, 0)
+transform = Transform3D(0.44463512, 0.304882, -0.84222716, 0, 0.9402881, 0.34037957, 0.8957118, -0.15134472, 0.41808513, 0, 0, 0)
