@@ -8,7 +8,11 @@
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_22lva"]
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_b43ah"]
+auto_exposure_enabled = true
+auto_exposure_scale = 0.1
 dof_blur_near_enabled = true
+auto_exposure_min_sensitivity = 50.0
+auto_exposure_max_sensitivity = 400.0
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_um8lo"]
 
@@ -28,15 +32,18 @@ Friction = 0.65
 shape = SubResource("CapsuleShape3D_22lva")
 
 [node name="TiledCube" parent="." unique_id=1041332627 instance=ExtResource("2_shmu5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.395)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.195)
+visible = false
 
 [node name="Camera" type="Camera3D" parent="." unique_id=1199423490]
 environment = ExtResource("2_b43ah")
 attributes = SubResource("CameraAttributesPractical_b43ah")
 current = true
+near = 0.01
+far = 1000.0
 
 [node name="4khelmet" parent="Camera" unique_id=1330405748 instance=ExtResource("2_x3d5u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.04, 0.145)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.04, 0.15)
 
 [node name="GroundRay" type="RayCast3D" parent="." unique_id=621786090]
 target_position = Vector3(0, -1.1, 0)

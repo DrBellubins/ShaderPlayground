@@ -24,3 +24,5 @@ shadow_enabled = true
 
 [node name="TiledCube2" parent="." unique_id=1141057990 instance=ExtResource("1_8np4j")]
 transform = Transform3D(5, 0, 0, 0, 3, 0, 0, 0, 0.5, -2.6909199, 2, 0.30154324)
+
+[editable path="Player"]

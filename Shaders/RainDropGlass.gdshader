@@ -1,7 +1,7 @@
 shader_type spatial;
 
 // Opaque-ish + depth writing via cutout (alpha scissor). No blending.
-render_mode unshaded, cull_back;
+render_mode unshaded, cull_disabled;
 
 uniform sampler2D screen_tex : hint_screen_texture, filter_linear_mipmap;
 
