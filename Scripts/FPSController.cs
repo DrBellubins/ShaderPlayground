@@ -36,6 +36,8 @@ public partial class FPSController : RigidBody3D
     private bool isCrouched = false;
     private bool isSliding = false;
 
+    private bool cursorLocked = false;
+
     public override void _Ready()
     {
         Camera = GetNode<Camera3D>("Camera");
@@ -59,7 +61,10 @@ public partial class FPSController : RigidBody3D
         if (@event is InputEventMouseButton mouseButton)
         {
             if (mouseButton.IsPressed() && mouseButton.ButtonIndex == MouseButton.Left)
+            {
+                cursorLocked = false;
                 Input.MouseMode = Input.MouseModeEnum.Captured;
+            }
         }
 
         // Capture the input from a gamepad
@@ -210,6 +215,9 @@ public partial class FPSController : RigidBody3D
 
     private void HandleCameraRotation(float delta)
     {
+        if (cursorLocked)
+            return;
+        
         if (Ginput.IsUsingController)
         {
             var joyX = Input.GetJoyAxis(0, JoyAxis.RightX);
@@ -252,7 +260,7 @@ public partial class FPSController : RigidBody3D
 
     private void HandleBodyRotation()
     {
-        if (lookInput == Vector2.Zero)
+        if (lookInput == Vector2.Zero || cursorLocked)
             return;
 
         RotateY(Mathf.DegToRad(-lookInput.X * MouseSensitivity));
@@ -261,6 +269,9 @@ public partial class FPSController : RigidBody3D
     public override void _UnhandledInput(InputEvent @event)
     {
         if (@event.IsActionPressed("ui_cancel"))
+        {
             Input.MouseMode = Input.MouseModeEnum.Visible;
+            cursorLocked = true;
+        }
     }
 }

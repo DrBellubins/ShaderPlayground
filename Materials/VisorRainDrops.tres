@@ -11,3 +11,5 @@ shader_parameter/time_scale = 1.0
 shader_parameter/alpha_gain = 1.0
 shader_parameter/alpha_softness = 0.15
 shader_parameter/min_alpha = 0.0
+shader_parameter/dither_strength = 2.0
+shader_parameter/alpha_scissor_bias = 0.0

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://xwhlqsiddvx6" path="res://Scripts/FPSController.cs" id="1_8iq7x"]
 [ext_resource type="Environment" uid="uid://b4qrcwxw4e8u0" path="res://main_env.tres" id="2_b43ah"]
+[ext_resource type="PackedScene" uid="uid://ipr05trqec85" path="res://Prefabs/TiledCube.tscn" id="2_shmu5"]
 [ext_resource type="PackedScene" uid="uid://ciqhugtofjpjn" path="res://Prefabs/fixed_helmet.tscn" id="2_x3d5u"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_22lva"]
@@ -25,6 +26,9 @@ Friction = 0.65
 
 [node name="Collider" type="CollisionShape3D" parent="." unique_id=1449961430]
 shape = SubResource("CapsuleShape3D_22lva")
+
+[node name="TiledCube" parent="." unique_id=1041332627 instance=ExtResource("2_shmu5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.75)
 
 [node name="Camera" type="Camera3D" parent="." unique_id=1199423490]
 environment = ExtResource("2_b43ah")
