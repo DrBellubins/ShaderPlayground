@@ -160,10 +160,13 @@ void fragment()
 
     float cut = mix(plain_cut, dither_cut, clamp(dither_strength, 0.0, 1.0));
 
-    // Force cutout + depth write behavior
-    //ALPHA_SCISSOR = cut;
+    // Dithered cutoff
+    if (cut < 0.5)
+    {
+        discard;
+    }
 
     // Output as opaque pixels where kept
     ALBEDO = col;
-    ALPHA = cut;
+    ALPHA = 1.0;
 }
